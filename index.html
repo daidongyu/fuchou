@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>翠翠复仇之路之拯救奶奶</title>
+    <title>翠翠复仇之路终极版</title>
     <style>
       * {
         margin: 0;
@@ -830,6 +830,25 @@
           },
           ult: { name: '★ 焚天烈焰舞 ★', damage: 390, color: '#dc143c' },
         },
+        grandma: {
+          id: 'grandma',
+          name: '奶奶',
+          color: '#8b4513',
+          avatarType: 'emoji',
+          avatar: '👵',
+          bodyColor: '#d2b48c',
+          outfitColor: '#6b4423',
+          maxHealth: 1300,
+          speed: 4.5,
+          moves: {
+            punch: { name: '刘家大拐杖', damage: 95, color: '#8b4513' },
+            kick: { name: '刘家老寒腿', damage: 70, color: '#a0522d' },
+            downPunch: { name: '拐杖横扫', damage: 85, color: '#654321' },
+            upPunch: { name: '拐杖上挑', damage: 90, color: '#8b4513' },
+            airKick: { name: '空中拐杖', damage: 80, color: '#a0522d' },
+          },
+          ult: { name: '★ 刘亚民刘亚峰助阵一击 ★', damage: 420, color: '#ffd700' },
+        },
       }
 
       // ==================== 输入处理 ====================
@@ -954,6 +973,7 @@
             jia: { color: '#9370db', speed: 15, size: 35, type: 'lightning' },
             shu: { color: '#228b22', speed: 11, size: 45, type: 'leaf' },
             shen: { color: '#ff4500', speed: 13, size: 50, type: 'fireball' },
+            grandma: { color: '#8b4513', speed: 9, size: 55, type: 'cane' },
           }
 
           const config = configs[charId] || configs.cui
@@ -1098,6 +1118,40 @@
               ctx.beginPath()
               ctx.arc(0, 0, p.size * 0.4, 0, Math.PI * 2)
               ctx.fill()
+            } else if (p.type === 'cane') {
+              // 拐杖投射物
+              ctx.rotate(p.facing * 0.3)
+              
+              // 拐杖柄
+              ctx.strokeStyle = '#8b4513'
+              ctx.lineWidth = 6
+              ctx.lineCap = 'round'
+              ctx.shadowBlur = 15
+              ctx.shadowColor = p.color
+              ctx.beginPath()
+              ctx.moveTo(-p.size * 0.8, 0)
+              ctx.lineTo(p.size * 0.8, 0)
+              ctx.stroke()
+              
+              // 拐杖头（弯曲部分）
+              ctx.beginPath()
+              ctx.arc(p.size * 0.8, -8, 10, 0, Math.PI, true)
+              ctx.stroke()
+              
+              // 金色装饰
+              ctx.strokeStyle = '#ffd700'
+              ctx.lineWidth = 3
+              ctx.beginPath()
+              ctx.moveTo(-p.size * 0.6, 0)
+              ctx.lineTo(p.size * 0.4, 0)
+              ctx.stroke()
+              
+              // 旋转光效
+              ctx.strokeStyle = 'rgba(255,215,0,0.5)'
+              ctx.lineWidth = 2
+              ctx.beginPath()
+              ctx.arc(0, 0, p.size + 5, 0, Math.PI * 2)
+              ctx.stroke()
             }
 
             ctx.restore()
@@ -1290,6 +1344,42 @@
                 }, i * 60)
               }
             },
+            grandma: () => {
+              // 刘亚民刘亚峰助阵一击 - 两个小人从天而降
+              const startX1 = x + facing * 200
+              const startX2 = x + facing * 280
+              const targetX = x + facing * 350
+              
+              // 刘亚民（第一个小人）
+              this.effects.push({
+                type: 'helper',
+                name: '刘亚民',
+                x: startX1,
+                y: -100,
+                targetX: targetX,
+                targetY: y,
+                facing,
+                color: '#ffd700',
+                life: 100,
+                maxLife: 100,
+                delay: 0,
+              })
+              
+              // 刘亚峰（第二个小人）
+              this.effects.push({
+                type: 'helper',
+                name: '刘亚峰',
+                x: startX2,
+                y: -150,
+                targetX: targetX + facing * 50,
+                targetY: y - 30,
+                facing,
+                color: '#ff6347',
+                life: 100,
+                maxLife: 100,
+                delay: 15,
+              })
+            },
           }
           if (effects[charId]) effects[charId]()
         }
@@ -1302,8 +1392,25 @@
             if (e.vx) e.x += e.vx
             if (e.vy) e.y += e.vy
             if (e.type === 'giantFist' && e.scale < 3) e.scale += 0.1
-
-            if (e.life <= 0) this.effects.splice(i, 1)
+            
+            if (e.life <= 0) {
+              // helper类型特效结束时产生爆炸粒子
+              if (e.type === 'helper') {
+                for (let j = 0; j < 20; j++) {
+                  this.effects.push({
+                    type: 'spark',
+                    x: e.targetX,
+                    y: e.targetY,
+                    vx: (Math.random() - 0.5) * 25,
+                    vy: (Math.random() - 0.5) * 25,
+                    color: '#ffd700',
+                    life: 20,
+                    maxLife: 20,
+                  })
+                }
+              }
+              this.effects.splice(i, 1)
+            }
           }
         }
 
@@ -1411,6 +1518,79 @@
               ctx.lineTo(e.x + 20, e.y - height)
               ctx.lineTo(e.x + 30, e.y)
               ctx.fill()
+            } else if (e.type === 'helper') {
+              // 刘亚民/刘亚峰小人
+              const progress = 1 - (e.life / e.maxLife)
+              if (progress * 100 < e.delay) {
+                ctx.restore()
+                continue
+              }
+              
+              const actualProgress = Math.min((progress * 100 - e.delay) / (100 - e.delay), 1)
+              const currX = e.x + (e.targetX - e.x) * actualProgress
+              const currY = e.y + (e.targetY - e.y) * actualProgress
+              
+              ctx.translate(currX, currY)
+              ctx.scale(e.facing, 1)
+              
+              // 下坠轨迹线
+              ctx.strokeStyle = 'rgba(255,215,0,0.3)'
+              ctx.lineWidth = 2
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              ctx.lineTo(0, -currY - 100)
+              ctx.stroke()
+              
+              // 小人身体
+              ctx.fillStyle = e.color
+              ctx.shadowBlur = 20
+              ctx.shadowColor = e.color
+              
+              // 头
+              ctx.beginPath()
+              ctx.arc(0, -25, 12, 0, Math.PI * 2)
+              ctx.fill()
+              
+              // 身体
+              ctx.fillRect(-10, -15, 20, 25)
+              
+              // 手臂（攻击姿态）
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 6
+              ctx.lineCap = 'round'
+              ctx.beginPath()
+              ctx.moveTo(-8, -10)
+              ctx.lineTo(-20, -20)
+              ctx.stroke()
+              ctx.beginPath()
+              ctx.moveTo(8, -10)
+              ctx.lineTo(25, -25)
+              ctx.stroke()
+              
+              // 腿
+              ctx.beginPath()
+              ctx.moveTo(-8, 10)
+              ctx.lineTo(-12, 30)
+              ctx.stroke()
+              ctx.beginPath()
+              ctx.moveTo(8, 10)
+              ctx.lineTo(12, 30)
+              ctx.stroke()
+              
+              // 名字
+              ctx.fillStyle = '#fff'
+              ctx.font = 'bold 12px Arial'
+              ctx.textAlign = 'center'
+              ctx.fillText(e.name, 0, -45)
+              
+              // 攻击到目标时的爆炸效果
+              if (actualProgress > 0.9) {
+                const explodeAlpha = (actualProgress - 0.9) * 10
+                ctx.fillStyle = `rgba(255,215,0,${explodeAlpha * 0.5})`
+                ctx.beginPath()
+                ctx.arc(0, 0, 40 * explodeAlpha, 0, Math.PI * 2)
+                ctx.fill()
+              }
             } else if (e.type === 'comboRing') {
               // 连击光环
               ctx.strokeStyle = e.color
