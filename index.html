@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>翠翠复仇之路终极版</title>
+    <title>翠翠复仇之路极光版</title>
     <style>
       * {
         margin: 0;
@@ -580,7 +580,11 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(255,105,180,0.3) 100%);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(255, 105, 180, 0.3) 100%
+        );
         display: none;
         flex-direction: column;
         align-items: center;
@@ -591,8 +595,12 @@
       }
 
       @keyframes endingFadeIn {
-        0% { opacity: 0; }
-        100% { opacity: 1; }
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
       }
 
       .ending-screen.show {
@@ -603,9 +611,9 @@
         font-size: clamp(32px, 8vw, 56px);
         font-weight: 900;
         color: #ff69b4;
-        text-shadow: 
-          0 0 20px rgba(255,105,180,0.8),
-          0 0 40px rgba(255,105,180,0.5),
+        text-shadow:
+          0 0 20px rgba(255, 105, 180, 0.8),
+          0 0 40px rgba(255, 105, 180, 0.5),
           4px 4px 0 #000;
         margin-bottom: 15px;
         text-align: center;
@@ -613,15 +621,23 @@
       }
 
       @keyframes endingTitlePop {
-        0% { transform: scale(0.5); opacity: 0; }
-        50% { transform: scale(1.1); }
-        100% { transform: scale(1); opacity: 1; }
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
       }
 
       .ending-subtitle {
         font-size: clamp(16px, 4vw, 24px);
         color: #fff;
-        text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         margin-bottom: 40px;
         text-align: center;
         opacity: 0.9;
@@ -629,13 +645,20 @@
 
       .ending-btn {
         background: linear-gradient(135deg, #ff69b4, #ff1493);
-        box-shadow: 0 0 30px rgba(255,105,180,0.6);
+        box-shadow: 0 0 30px rgba(255, 105, 180, 0.6);
         animation: endingBtnPulse 2s ease-in-out infinite;
       }
 
       @keyframes endingBtnPulse {
-        0%, 100% { transform: scale(1); box-shadow: 0 0 30px rgba(255,105,180,0.6); }
-        50% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255,105,180,0.9); }
+        0%,
+        100% {
+          transform: scale(1);
+          box-shadow: 0 0 30px rgba(255, 105, 180, 0.6);
+        }
+        50% {
+          transform: scale(1.05);
+          box-shadow: 0 0 50px rgba(255, 105, 180, 0.9);
+        }
       }
     </style>
   </head>
@@ -682,8 +705,12 @@
       <!-- 结局画面 -->
       <div class="ending-screen" id="endingScreen">
         <div class="ending-title">🎉 翠翠顺利救出了奶奶! 🎉</div>
-        <div class="ending-subtitle">正义战胜了邪恶，翠翠和奶奶幸福地回家了</div>
-        <button class="restart-btn ending-btn" id="endingRestartBtn">再来一局</button>
+        <div class="ending-subtitle">
+          正义战胜了邪恶，翠翠和奶奶幸福地回家了
+        </div>
+        <button class="restart-btn ending-btn" id="endingRestartBtn">
+          再来一局
+        </button>
       </div>
 
       <div id="controlArea">
@@ -729,6 +756,9 @@
           <span class="key">D</span> 集气 <span class="key">F</span> 大招
         </div>
         <div class="pc-key-row">↓+拳/腿=下段 ↑+拳/腿=上段 空中+拳/腿=空击</div>
+        <div class="pc-key-row">组合技: 后前+拳=升龙 | 前后+腿=旋风 | 下前下前+拳=波动拳</div>
+        <div class="pc-key-row">后后前+拳=突进 | 前下前+拳=虎啸 | 下下上+拳=震地裂 | 后前后+腿=龙卷</div>
+        <div class="pc-key-row">下上+腿=音速踢 | 前后后+拳=反击 | 前前+拳=疾冲 | 后后+腿=后撤</div>
       </div>
     </div>
 
@@ -847,7 +877,11 @@
             upPunch: { name: '拐杖上挑', damage: 90, color: '#8b4513' },
             airKick: { name: '空中拐杖', damage: 80, color: '#a0522d' },
           },
-          ult: { name: '★ 刘亚民刘亚峰助阵一击 ★', damage: 420, color: '#ffd700' },
+          ult: {
+            name: '★ 刘亚民刘亚峰助阵一击 ★',
+            damage: 420,
+            color: '#ffd700',
+          },
         },
       }
 
@@ -1121,7 +1155,7 @@
             } else if (p.type === 'cane') {
               // 拐杖投射物
               ctx.rotate(p.facing * 0.3)
-              
+
               // 拐杖柄
               ctx.strokeStyle = '#8b4513'
               ctx.lineWidth = 6
@@ -1132,12 +1166,12 @@
               ctx.moveTo(-p.size * 0.8, 0)
               ctx.lineTo(p.size * 0.8, 0)
               ctx.stroke()
-              
+
               // 拐杖头（弯曲部分）
               ctx.beginPath()
               ctx.arc(p.size * 0.8, -8, 10, 0, Math.PI, true)
               ctx.stroke()
-              
+
               // 金色装饰
               ctx.strokeStyle = '#ffd700'
               ctx.lineWidth = 3
@@ -1145,7 +1179,7 @@
               ctx.moveTo(-p.size * 0.6, 0)
               ctx.lineTo(p.size * 0.4, 0)
               ctx.stroke()
-              
+
               // 旋转光效
               ctx.strokeStyle = 'rgba(255,215,0,0.5)'
               ctx.lineWidth = 2
@@ -1174,42 +1208,488 @@
           this.effects = []
         }
 
-        addHitSpark(x, y, color) {
+        addHitSpark(x, y, color, isCritical = false) {
+          // ========== 超炫击中特效 - 炫酷到爆炸 ==========
+          const sparkCount = isCritical ? 50 : 35
+          const shockRings = isCritical ? 5 : 3
+
+          // 1. 爆发火花 - 更多、更快、更亮
+          for (let i = 0; i < sparkCount; i++) {
+            const angle = (Math.PI * 2 * i) / sparkCount + Math.random() * 0.5
+            const speed = 12 + Math.random() * 20
+            this.effects.push({
+              type: 'superSpark',
+              x: x + (Math.random() - 0.5) * 20,
+              y: y + (Math.random() - 0.5) * 20,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              color: Math.random() > 0.3 ? color : (Math.random() > 0.5 ? '#ffffff' : '#ffff00'),
+              life: 25,
+              maxLife: 25,
+              size: 2 + Math.random() * 6,
+              glow: true,
+            })
+          }
+
+          // 2. 多重冲击波环
+          for (let i = 0; i < shockRings; i++) {
+            setTimeout(() => {
+              this.effects.push({
+                type: 'shockRing',
+                x,
+                y,
+                color: i % 2 === 0 ? color : '#ffffff',
+                life: 30,
+                maxLife: 30,
+                radius: 20 + i * 30,
+                width: 5 - i * 0.5,
+                glow: true,
+              })
+            }, i * 25)
+          }
+
+          // 3. 能量碎片
           for (let i = 0; i < 12; i++) {
             this.effects.push({
-              type: 'spark',
+              type: 'debris',
               x,
               y,
-              vx: (Math.random() - 0.5) * 20,
-              vy: (Math.random() - 0.5) * 20,
-              color,
+              vx: (Math.random() - 0.5) * 16,
+              vy: -6 - Math.random() * 12,
+              color: Math.random() > 0.5 ? color : '#cccccc',
+              life: 50,
+              maxLife: 50,
+              size: 4 + Math.random() * 5,
+              rotation: Math.random() * Math.PI,
+              rotSpeed: (Math.random() - 0.5) * 0.3,
+            })
+          }
+
+          // 4. 十字闪光
+          this.effects.push({
+            type: 'crossFlash',
+            x,
+            y,
+            color: '#ffffff',
+            life: 18,
+            maxLife: 18,
+            size: 80,
+            glow: true,
+          })
+
+          // 5. 星形闪光
+          this.effects.push({
+            type: 'starBurst',
+            x,
+            y,
+            color,
+            life: 20,
+            maxLife: 20,
+            size: 60,
+            points: 8,
+          })
+
+          // 6. 闪电裂纹
+          for (let i = 0; i < 4; i++) {
+            this.effects.push({
+              type: 'crackLine',
+              x,
+              y,
+              angle: (Math.PI * 2 * i) / 4 + Math.random() * 0.5,
+              color: '#ffffff',
               life: 15,
               maxLife: 15,
+              length: 40 + Math.random() * 40,
+              branches: 2 + Math.floor(Math.random() * 3),
+            })
+          }
+
+          // 7. 暴击大数字
+          if (isCritical) {
+            this.effects.push({
+              type: 'damageText',
+              x,
+              y: y - 50,
+              text: 'CRITICAL!',
+              color: '#ff0000',
+              life: 45,
+              maxLife: 45,
+              scale: 2,
+              vy: -2,
             })
           }
         }
 
         addComboEffect(x, y, color, comboLevel) {
-          // 连击光环
-          this.effects.push({
-            type: 'comboRing',
-            x, y, color, comboLevel,
-            life: 20,
-            maxLife: 20,
-            radius: 30 + comboLevel * 10
-          })
-          
-          // 连击文字
-          if (comboLevel >= 3) {
+          // ========== 超炫连击光环 - 炫酷到爆炸 ==========
+          const ringCount = 3 + comboLevel
+          const particleCount = 15 + comboLevel * 8
+
+          // 多层扩散光环
+          for (let i = 0; i < ringCount; i++) {
+            setTimeout(() => {
+              this.effects.push({
+                type: 'superRing',
+                x,
+                y,
+                color,
+                comboLevel,
+                life: 30,
+                maxLife: 30,
+                radius: 30 + comboLevel * 12 + i * 18,
+                layer: i,
+              })
+            }, i * 40)
+          }
+
+          // 能量爆发粒子
+          for (let i = 0; i < particleCount; i++) {
+            const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.5
+            const speed = 6 + Math.random() * 10 + comboLevel * 2
             this.effects.push({
-              type: 'comboText',
-              x, y: y - 50,
-              text: comboLevel + '连击!',
-              color,
-              life: 30,
-              maxLife: 30
+              type: 'energyParticle',
+              x,
+              y,
+              vx: Math.cos(angle) * speed,
+              vy: Math.sin(angle) * speed,
+              color: Math.random() > 0.3 ? color : '#ffffff',
+              life: 35,
+              maxLife: 35,
+              size: 3 + Math.random() * 5 + comboLevel,
             })
           }
+
+          // 连击文字
+          const texts = ['', 'SINGLE!', 'DOUBLE!', 'TRIPLE!', 'QUADRA!', 'PENTA!']
+          this.effects.push({
+            type: 'comboText',
+            x,
+            y: y - 60 - comboLevel * 10,
+            text: texts[comboLevel] || comboLevel + ' HIT!',
+            color,
+            life: 45,
+            maxLife: 45,
+            scale: 1 + comboLevel * 0.25,
+            vy: -1.5,
+          })
+
+          // 高连击额外闪光
+          if (comboLevel >= 3) {
+            this.effects.push({
+              type: 'megaFlash',
+              x,
+              y,
+              color: '#ffffff',
+              life: 15,
+              maxLife: 15,
+              size: 120 + comboLevel * 20,
+            })
+          }
+        }
+
+        addComboAttackEffect(x, y, facing, combo) {
+          // ========== 组合技超炫特效 - 炫酷到爆炸 ==========
+          const fx = facing > 0 ? x + 50 : x - 50
+
+          switch (combo.type) {
+            case 'upper': // 升龙
+              for (let i = 0; i < 12; i++) {
+                this.effects.push({
+                  type: 'dragonFlame',
+                  x: fx + (Math.random() - 0.5) * 60,
+                  y: y - i * 30,
+                  color: combo.color,
+                  life: 45,
+                  maxLife: 45,
+                  delay: i * 2,
+                  size: 25 + Math.random() * 15,
+                })
+              }
+              break
+            case 'spin': // 旋风
+              for (let i = 0; i < 16; i++) {
+                const angle = (Math.PI * 2 * i) / 16
+                this.effects.push({
+                  type: 'tornado',
+                  x: fx,
+                  y,
+                  angle,
+                  color: combo.color,
+                  life: 60,
+                  maxLife: 60,
+                  radius: 20 + i * 5,
+                })
+              }
+              break
+            case 'smash': // 爆裂
+              this.effects.push({
+                type: 'explosion',
+                x: fx,
+                y,
+                color: combo.color,
+                life: 40,
+                maxLife: 40,
+                radius: 120,
+              })
+              // 二次爆炸
+              setTimeout(() => {
+                this.effects.push({
+                  type: 'explosion',
+                  x: fx,
+                  y,
+                  color: '#ffffff',
+                  life: 25,
+                  maxLife: 25,
+                  radius: 80,
+                })
+              }, 100)
+              break
+            case 'flip': // 空翻
+              for (let i = 0; i < 6; i++) {
+                this.effects.push({
+                  type: 'flipTrail',
+                  x: x + facing * i * 15,
+                  y: y - i * 10,
+                  facing,
+                  color: combo.color,
+                  life: 40,
+                  maxLife: 40,
+                  delay: i * 3,
+                })
+              }
+              break
+            case 'slide': // 滑铲
+              for (let i = 0; i < 10; i++) {
+                this.effects.push({
+                  type: 'slideTrail',
+                  x: x + facing * i * 20,
+                  y,
+                  facing,
+                  color: combo.color,
+                  life: 40,
+                  maxLife: 40,
+                  delay: i * 2,
+                })
+              }
+              break
+            case 'counter': // 反击
+              this.effects.push({
+                type: 'timeStop',
+                x: fx,
+                y,
+                color: combo.color,
+                life: 30,
+                maxLife: 30,
+                rings: 3,
+              })
+              break
+            case 'charge': // 突进重拳
+              for (let i = 0; i < 8; i++) {
+                this.effects.push({
+                  type: 'chargeTrail',
+                  x: x - facing * i * 25,
+                  y,
+                  facing,
+                  color: combo.color,
+                  life: 30,
+                  maxLife: 30,
+                  delay: i * 2,
+                })
+              }
+              // 冲击锥
+              this.effects.push({
+                type: 'impactCone',
+                x: fx,
+                y,
+                facing,
+                color: combo.color,
+                life: 25,
+                maxLife: 25,
+              })
+              break
+            case 'wave': // 波动拳
+              this.effects.push({
+                type: 'energyWave',
+                x: fx,
+                y,
+                facing,
+                color: combo.color,
+                life: 50,
+                maxLife: 50,
+                size: 60,
+              })
+              // 螺旋气劲
+              for (let i = 0; i < 20; i++) {
+                this.effects.push({
+                  type: 'spiral',
+                  x: fx,
+                  y,
+                  angle: (Math.PI * 2 * i) / 20,
+                  color: '#ffffff',
+                  life: 35,
+                  maxLife: 35,
+                  radius: 20,
+                })
+              }
+              break
+            case 'shadow': // 影袭踢
+              for (let i = 0; i < 5; i++) {
+                this.effects.push({
+                  type: 'shadowClone',
+                  x: x + facing * (i * 30 - 60),
+                  y,
+                  facing,
+                  color: combo.color,
+                  life: 35,
+                  maxLife: 35,
+                  delay: i * 4,
+                })
+              }
+              break
+            case 'quake': // 震地裂
+              for (let i = 0; i < 6; i++) {
+                this.effects.push({
+                  type: 'groundCrack',
+                  x: fx + (Math.random() - 0.5) * 100,
+                  y: y + 40,
+                  color: combo.color,
+                  life: 60,
+                  maxLife: 60,
+                  delay: i * 50,
+                  width: 3 + Math.random() * 3,
+                  length: 80 + Math.random() * 60,
+                  angle: (Math.random() - 0.5) * 0.5,
+                })
+              }
+              // 碎石喷发
+              for (let i = 0; i < 15; i++) {
+                this.effects.push({
+                  type: 'rockBurst',
+                  x: fx + (Math.random() - 0.5) * 80,
+                  y: y + 40,
+                  vx: (Math.random() - 0.5) * 10,
+                  vy: -8 - Math.random() * 12,
+                  color: '#654321',
+                  life: 45,
+                  maxLife: 45,
+                  size: 4 + Math.random() * 6,
+                })
+              }
+              break
+            case 'meteor': // 陨石坠
+              this.effects.push({
+                type: 'meteorFall',
+                x: fx,
+                y: y - 300,
+                targetY: y,
+                color: combo.color,
+                life: 40,
+                maxLife: 40,
+                size: 80,
+              })
+              break
+            case 'tornado': // 龙卷风斩
+              for (let i = 0; i < 30; i++) {
+                this.effects.push({
+                  type: 'bigTornado',
+                  x: fx,
+                  y: y - i * 8,
+                  angle: i * 0.5,
+                  color: combo.color,
+                  life: 70,
+                  maxLife: 70,
+                  radius: 30 + i * 2,
+                })
+              }
+              break
+            case 'sonic': // 音速踢
+              this.effects.push({
+                type: 'sonicBoom',
+                x: fx,
+                y,
+                facing,
+                color: combo.color,
+                life: 30,
+                maxLife: 30,
+              })
+              // 速度线
+              for (let i = 0; i < 12; i++) {
+                this.effects.push({
+                  type: 'speedLine',
+                  x: fx - facing * (50 + Math.random() * 100),
+                  y: y + (Math.random() - 0.5) * 60,
+                  facing,
+                  color: '#ffffff',
+                  life: 15,
+                  maxLife: 15,
+                  length: 50 + Math.random() * 50,
+                })
+              }
+              break
+            case 'tiger': // 虎啸掌
+              this.effects.push({
+                type: 'tigerHead',
+                x: fx,
+                y,
+                facing,
+                color: combo.color,
+                life: 35,
+                maxLife: 35,
+                size: 100,
+              })
+              break
+            case 'sweep': // 地裂扫堂腿
+              for (let i = 0; i < 12; i++) {
+                this.effects.push({
+                  type: 'sweepArc',
+                  x: x,
+                  y: y + 40,
+                  facing,
+                  color: combo.color,
+                  life: 30,
+                  maxLife: 30,
+                  angle: -Math.PI / 3 + (i / 12) * (Math.PI * 1.5),
+                  radius: 30 + i * 8,
+                  delay: i * 2,
+                })
+              }
+              break
+            case 'dashStrike': // 疾冲拳
+              for (let i = 0; i < 6; i++) {
+                this.effects.push({
+                  type: 'dashAfterimage',
+                  x: x - facing * i * 20,
+                  y,
+                  facing,
+                  color: combo.color,
+                  life: 20,
+                  maxLife: 20,
+                  delay: i * 2,
+                })
+              }
+              break
+            case 'retreat': // 后撤踢
+              this.effects.push({
+                type: 'retreatBurst',
+                x: x,
+                y,
+                color: combo.color,
+                life: 25,
+                maxLife: 25,
+              })
+              break
+          }
+
+          // 通用 mega 闪光
+          this.effects.push({
+            type: 'megaFlash',
+            x: fx,
+            y,
+            color: '#ffffff',
+            life: 12,
+            maxLife: 12,
+            size: 150,
+          })
         }
 
         addSpecialEffect(x, y, color, attackType, down, up, air) {
@@ -1218,10 +1698,11 @@
             // 下+攻击 - 地面冲击
             this.effects.push({
               type: 'groundSlam',
-              x, y: y + 40,
+              x,
+              y: y + 40,
               color,
               life: 25,
-              maxLife: 25
+              maxLife: 25,
             })
           } else if (up) {
             // 上+攻击 - 上升气流
@@ -1232,17 +1713,18 @@
                 y: y + (Math.random() - 0.5) * 20,
                 color,
                 life: 20,
-                maxLife: 20
+                maxLife: 20,
               })
             }
           } else if (air) {
             // 空中攻击 - 旋转残影
             this.effects.push({
               type: 'airSpin',
-              x, y,
+              x,
+              y,
               color,
               life: 30,
-              maxLife: 30
+              maxLife: 30,
             })
           }
         }
@@ -1349,7 +1831,7 @@
               const startX1 = x + facing * 200
               const startX2 = x + facing * 280
               const targetX = x + facing * 350
-              
+
               // 刘亚民（第一个小人）
               this.effects.push({
                 type: 'helper',
@@ -1364,7 +1846,7 @@
                 maxLife: 100,
                 delay: 0,
               })
-              
+
               // 刘亚峰（第二个小人）
               this.effects.push({
                 type: 'helper',
@@ -1392,7 +1874,7 @@
             if (e.vx) e.x += e.vx
             if (e.vy) e.y += e.vy
             if (e.type === 'giantFist' && e.scale < 3) e.scale += 0.1
-            
+
             if (e.life <= 0) {
               // helper类型特效结束时产生爆炸粒子
               if (e.type === 'helper') {
@@ -1520,19 +2002,22 @@
               ctx.fill()
             } else if (e.type === 'helper') {
               // 刘亚民/刘亚峰小人
-              const progress = 1 - (e.life / e.maxLife)
+              const progress = 1 - e.life / e.maxLife
               if (progress * 100 < e.delay) {
                 ctx.restore()
                 continue
               }
-              
-              const actualProgress = Math.min((progress * 100 - e.delay) / (100 - e.delay), 1)
+
+              const actualProgress = Math.min(
+                (progress * 100 - e.delay) / (100 - e.delay),
+                1,
+              )
               const currX = e.x + (e.targetX - e.x) * actualProgress
               const currY = e.y + (e.targetY - e.y) * actualProgress
-              
+
               ctx.translate(currX, currY)
               ctx.scale(e.facing, 1)
-              
+
               // 下坠轨迹线
               ctx.strokeStyle = 'rgba(255,215,0,0.3)'
               ctx.lineWidth = 2
@@ -1540,20 +2025,20 @@
               ctx.moveTo(0, 0)
               ctx.lineTo(0, -currY - 100)
               ctx.stroke()
-              
+
               // 小人身体
               ctx.fillStyle = e.color
               ctx.shadowBlur = 20
               ctx.shadowColor = e.color
-              
+
               // 头
               ctx.beginPath()
               ctx.arc(0, -25, 12, 0, Math.PI * 2)
               ctx.fill()
-              
+
               // 身体
               ctx.fillRect(-10, -15, 20, 25)
-              
+
               // 手臂（攻击姿态）
               ctx.strokeStyle = e.color
               ctx.lineWidth = 6
@@ -1566,7 +2051,7 @@
               ctx.moveTo(8, -10)
               ctx.lineTo(25, -25)
               ctx.stroke()
-              
+
               // 腿
               ctx.beginPath()
               ctx.moveTo(-8, 10)
@@ -1576,13 +2061,13 @@
               ctx.moveTo(8, 10)
               ctx.lineTo(12, 30)
               ctx.stroke()
-              
+
               // 名字
               ctx.fillStyle = '#fff'
               ctx.font = 'bold 12px Arial'
               ctx.textAlign = 'center'
               ctx.fillText(e.name, 0, -45)
-              
+
               // 攻击到目标时的爆炸效果
               if (actualProgress > 0.9) {
                 const explodeAlpha = (actualProgress - 0.9) * 10
@@ -1608,12 +2093,52 @@
             } else if (e.type === 'comboText') {
               // 连击文字
               ctx.fillStyle = e.color
-              ctx.font = 'bold 24px Arial'
+              ctx.font = `bold ${24 * (e.scale || 1)}px Arial`
               ctx.textAlign = 'center'
               ctx.globalAlpha = alpha
               ctx.shadowBlur = 15
               ctx.shadowColor = e.color
-              ctx.fillText(e.text, e.x, e.y)
+              const yOff = e.vy ? e.vy * (e.maxLife - e.life) : 0
+              ctx.fillText(e.text, e.x, e.y + yOff)
+            } else if (e.type === 'superRing') {
+              // 超炫连击光环
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3 + e.comboLevel * 0.5
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 25
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.radius * (1.8 - alpha * 0.8), 0, Math.PI * 2)
+              ctx.stroke()
+              // 内圈
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.radius * 0.6 * (1.8 - alpha * 0.8), 0, Math.PI * 2)
+              ctx.stroke()
+              // 装饰点
+              for (let i = 0; i < 8; i++) {
+                const a = (Math.PI * 2 * i) / 8 + e.life * 0.1
+                const rx = e.x + Math.cos(a) * e.radius * (1.5 - alpha * 0.5)
+                const ry = e.y + Math.sin(a) * e.radius * (1.5 - alpha * 0.5)
+                ctx.beginPath()
+                ctx.arc(rx, ry, 3 + e.comboLevel, 0, Math.PI * 2)
+                ctx.fill()
+              }
+            } else if (e.type === 'energyParticle') {
+              // 能量粒子
+              ctx.globalAlpha = alpha
+              ctx.fillStyle = e.color
+              ctx.shadowBlur = 10
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.size * alpha, 0, Math.PI * 2)
+              ctx.fill()
+              // 拖尾
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = e.size * 0.4
+              ctx.beginPath()
+              ctx.moveTo(e.x, e.y)
+              ctx.lineTo(e.x - e.vx, e.y - e.vy)
+              ctx.stroke()
             } else if (e.type === 'groundSlam') {
               // 地面冲击
               ctx.fillStyle = e.color
@@ -1623,13 +2148,21 @@
               // 冲击波纹
               for (let i = 0; i < 3; i++) {
                 ctx.beginPath()
-                ctx.ellipse(e.x, e.y, (30 + i * 20) * (2 - alpha), (10 + i * 7) * (2 - alpha), 0, 0, Math.PI * 2)
+                ctx.ellipse(
+                  e.x,
+                  e.y,
+                  (30 + i * 20) * (2 - alpha),
+                  (10 + i * 7) * (2 - alpha),
+                  0,
+                  0,
+                  Math.PI * 2,
+                )
                 ctx.fill()
               }
               // 碎石效果
               ctx.fillStyle = '#888'
               for (let i = 0; i < 5; i++) {
-                const rx = e.x + Math.cos(i * 1.2) * (20 + (1-alpha) * 50)
+                const rx = e.x + Math.cos(i * 1.2) * (20 + (1 - alpha) * 50)
                 const ry = e.y + Math.sin(i * 0.5) * 5
                 ctx.fillRect(rx, ry, 6, 6)
               }
@@ -1651,13 +2184,473 @@
               ctx.globalAlpha = alpha * 0.7
               ctx.translate(e.x, e.y)
               ctx.rotate(e.life * 0.5)
-              // 旋转光圈
               for (let i = 0; i < 4; i++) {
                 ctx.rotate(Math.PI / 2)
                 ctx.beginPath()
                 ctx.arc(30, 0, 15, 0, Math.PI * 2)
                 ctx.stroke()
               }
+            } else if (e.type === 'superSpark') {
+              // 超炫火花
+              ctx.globalAlpha = alpha
+              ctx.fillStyle = e.color
+              if (e.glow) {
+                ctx.shadowBlur = 15
+                ctx.shadowColor = e.color
+              }
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.size * alpha, 0, Math.PI * 2)
+              ctx.fill()
+              // 拖尾
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = e.size * 0.5
+              ctx.beginPath()
+              ctx.moveTo(e.x, e.y)
+              ctx.lineTo(e.x - e.vx * 2, e.y - e.vy * 2)
+              ctx.stroke()
+            } else if (e.type === 'shockRing') {
+              // 冲击波环
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = e.width || 3
+              ctx.globalAlpha = alpha
+              if (e.glow) {
+                ctx.shadowBlur = 20
+                ctx.shadowColor = e.color
+              }
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.radius * (2 - alpha), 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (e.type === 'debris') {
+              // 能量碎片
+              ctx.globalAlpha = alpha
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              if (e.rotSpeed) ctx.rotate(e.rotation + e.rotSpeed * (e.maxLife - e.life))
+              ctx.fillRect(-e.size / 2, -e.size / 2, e.size, e.size)
+            } else if (e.type === 'crossFlash') {
+              // 十字闪光
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 4
+              ctx.globalAlpha = alpha
+              if (e.glow) {
+                ctx.shadowBlur = 30
+                ctx.shadowColor = e.color
+              }
+              const s = e.size * (1.5 - alpha * 0.5)
+              ctx.beginPath()
+              ctx.moveTo(e.x - s, e.y)
+              ctx.lineTo(e.x + s, e.y)
+              ctx.moveTo(e.x, e.y - s)
+              ctx.lineTo(e.x, e.y + s)
+              ctx.stroke()
+            } else if (e.type === 'starBurst') {
+              // 星形闪光
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 20
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.life * 0.2)
+              const outer = e.size * (1.2 - alpha * 0.2)
+              const inner = outer * 0.4
+              const pts = e.points || 5
+              ctx.beginPath()
+              for (let i = 0; i < pts * 2; i++) {
+                const r = i % 2 === 0 ? outer : inner
+                const a = (Math.PI * i) / pts
+                const px = Math.cos(a) * r
+                const py = Math.sin(a) * r
+                if (i === 0) ctx.moveTo(px, py)
+                else ctx.lineTo(px, py)
+              }
+              ctx.closePath()
+              ctx.stroke()
+            } else if (e.type === 'crackLine') {
+              // 闪电裂纹
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 2
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 10
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.angle)
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              let cx = 0
+              let cy = 0
+              const steps = e.branches || 3
+              for (let i = 1; i <= steps; i++) {
+                cx = (e.length * i) / steps
+                cy = (Math.random() - 0.5) * 15
+                ctx.lineTo(cx, cy)
+              }
+              ctx.stroke()
+            } else if (e.type === 'damageText') {
+              // 伤害数字
+              ctx.fillStyle = e.color
+              ctx.font = `bold ${24 * e.scale}px Arial`
+              ctx.textAlign = 'center'
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 15
+              ctx.shadowColor = e.color
+              ctx.fillText(e.text, e.x, e.y)
+            } else if (e.type === 'dragonFlame') {
+              // 升龙火焰柱
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.size || 30)
+              grad.addColorStop(0, e.color)
+              grad.addColorStop(0.5, 'rgba(255,100,0,0.5)')
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.globalAlpha = alpha * 0.8
+              ctx.shadowBlur = 25
+              ctx.shadowColor = '#ff4400'
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.size || 30, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'tornado') {
+              // 旋风粒子
+              const progress = 1 - alpha
+              const rx = e.x + Math.cos(e.angle + progress * 10) * (20 + progress * 60)
+              const ry = e.y + Math.sin(e.angle + progress * 10) * (10 + progress * 30)
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 15
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.arc(rx, ry, 10 + progress * 20, 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (e.type === 'explosion') {
+              // 爆炸
+              const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.radius * (1.5 - alpha * 0.5))
+              grad.addColorStop(0, 'rgba(255,255,255,0.9)')
+              grad.addColorStop(0.3, e.color)
+              grad.addColorStop(0.7, 'rgba(255,100,0,0.5)')
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 40
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.radius * (1.5 - alpha * 0.5), 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'flipTrail') {
+              // 空翻残影
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.5
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.ellipse(0, 0, 25, 10, 0, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'slideTrail') {
+              // 滑铲轨迹
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.4
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.ellipse(0, 0, 30, 8, 0, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'timeStop') {
+              // 时停特效
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3
+              ctx.globalAlpha = alpha
+              ctx.setLineDash([5, 5])
+              for (let i = 0; i < (e.rings || 3); i++) {
+                ctx.beginPath()
+                ctx.arc(e.x, e.y, (40 + i * 25) * (2 - alpha), 0, Math.PI * 2)
+                ctx.stroke()
+              }
+              ctx.setLineDash([])
+            } else if (e.type === 'chargeTrail') {
+              // 突进残影
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.3
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.roundRect(-20, -40, 40, 45, 8)
+              ctx.fill()
+            } else if (e.type === 'impactCone') {
+              // 冲击锥
+              const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x + e.facing * 80, e.y, 100)
+              grad.addColorStop(0, e.color)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.globalAlpha = alpha * 0.6
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              ctx.lineTo(120, -40)
+              ctx.lineTo(120, 40)
+              ctx.closePath()
+              ctx.fill()
+            } else if (e.type === 'energyWave') {
+              // 能量波
+              const progress = 1 - alpha
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 6 - progress * 3
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 30
+              ctx.shadowColor = e.color
+              ctx.translate(e.x + e.facing * progress * 150, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.arc(0, 0, e.size + progress * 50, -Math.PI / 3, Math.PI / 3)
+              ctx.stroke()
+              ctx.beginPath()
+              ctx.arc(0, 0, e.size * 0.6 + progress * 30, -Math.PI / 4, Math.PI / 4)
+              ctx.stroke()
+            } else if (e.type === 'spiral') {
+              // 螺旋气劲
+              const progress = 1 - alpha
+              const r = e.radius + progress * 80
+              const sx = e.x + Math.cos(e.angle + progress * 8) * r
+              const sy = e.y + Math.sin(e.angle + progress * 8) * r * 0.3
+              ctx.fillStyle = e.color
+              ctx.globalAlpha = alpha * 0.8
+              ctx.beginPath()
+              ctx.arc(sx, sy, 4, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'shadowClone') {
+              // 影分身
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.4
+              ctx.fillStyle = '#000'
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.roundRect(-22, -70, 44, 45, 8)
+              ctx.fill()
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 2
+              ctx.stroke()
+            } else if (e.type === 'groundCrack') {
+              // 地面裂缝
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = e.width || 3
+              ctx.globalAlpha = alpha
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.angle || 0)
+              ctx.beginPath()
+              ctx.moveTo(-e.length / 2, 0)
+              ctx.lineTo(e.length / 2, 0)
+              ctx.stroke()
+              // 裂缝分支
+              for (let i = 0; i < 3; i++) {
+                const bx = -e.length / 4 + (i * e.length) / 6
+                ctx.beginPath()
+                ctx.moveTo(bx, 0)
+                ctx.lineTo(bx + (Math.random() - 0.5) * 20, -10 - Math.random() * 15)
+                ctx.stroke()
+              }
+            } else if (e.type === 'rockBurst') {
+              // 碎石
+              ctx.globalAlpha = alpha
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.life * 0.1)
+              ctx.fillRect(-e.size / 2, -e.size / 2, e.size, e.size)
+            } else if (e.type === 'meteorFall') {
+              // 陨石坠落
+              const progress = 1 - alpha
+              const my = e.y + (e.targetY - e.y) * progress
+              const mx = e.x + Math.sin(progress * 10) * 20
+              const grad = ctx.createRadialGradient(mx, my, 0, mx, my, e.size)
+              grad.addColorStop(0, '#ffff00')
+              grad.addColorStop(0.4, e.color)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.globalAlpha = 0.9
+              ctx.shadowBlur = 50
+              ctx.shadowColor = '#ff4400'
+              ctx.beginPath()
+              ctx.arc(mx, my, e.size * (1 - progress * 0.3), 0, Math.PI * 2)
+              ctx.fill()
+              // 尾焰
+              ctx.fillStyle = 'rgba(255,100,0,0.5)'
+              ctx.beginPath()
+              ctx.moveTo(mx, my)
+              ctx.lineTo(mx - 30, my - 80)
+              ctx.lineTo(mx + 30, my - 80)
+              ctx.fill()
+            } else if (e.type === 'bigTornado') {
+              // 巨大龙卷风
+              const progress = 1 - alpha
+              const rx = e.x + Math.cos(e.angle + progress * 15) * e.radius * (0.5 + progress * 0.5)
+              const ry = e.y + progress * 50
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 4
+              ctx.globalAlpha = alpha * 0.7
+              ctx.shadowBlur = 20
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.ellipse(rx, ry, e.radius * 0.3, 8, Math.cos(e.angle + progress * 15) * 0.3, 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (e.type === 'sonicBoom') {
+              // 音速爆
+              const progress = 1 - alpha
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 5
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 30
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              ctx.quadraticCurveTo(60 + progress * 40, -30 - progress * 20, 100 + progress * 60, 0)
+              ctx.quadraticCurveTo(60 + progress * 40, 30 + progress * 20, 0, 0)
+              ctx.stroke()
+            } else if (e.type === 'speedLine') {
+              // 速度线
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 2
+              ctx.globalAlpha = alpha
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              ctx.lineTo(e.length, 0)
+              ctx.stroke()
+            } else if (e.type === 'tigerHead') {
+              // 虎头能量
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              const s = e.size * (1.2 - alpha * 0.2)
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 5
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 30
+              ctx.shadowColor = e.color
+              // 虎头轮廓
+              ctx.beginPath()
+              ctx.arc(0, -20, s * 0.4, Math.PI, 0)
+              ctx.lineTo(s * 0.5, 20)
+              ctx.lineTo(-s * 0.5, 20)
+              ctx.closePath()
+              ctx.stroke()
+              // 眼睛
+              ctx.fillStyle = '#ff0000'
+              ctx.beginPath()
+              ctx.arc(-s * 0.2, -25, s * 0.1, 0, Math.PI * 2)
+              ctx.arc(s * 0.2, -25, s * 0.1, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'sweepArc') {
+              // 扫堂弧
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 4
+              ctx.globalAlpha = alpha
+              ctx.shadowBlur = 15
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.angle)
+              ctx.beginPath()
+              ctx.arc(0, 0, e.radius, -0.3, 0.3)
+              ctx.stroke()
+            } else if (e.type === 'dashAfterimage') {
+              // 疾冲残影
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.35
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.roundRect(-20, -50, 40, 50, 8)
+              ctx.fill()
+            } else if (e.type === 'retreatBurst') {
+              // 后撤爆发
+              const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, 80 * (1.5 - alpha * 0.5))
+              grad.addColorStop(0, e.color)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.globalAlpha = alpha * 0.5
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, 80 * (1.5 - alpha * 0.5), 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'megaFlash') {
+              // 超级闪光
+              const grad = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.size)
+              grad.addColorStop(0, `rgba(255,255,255,${alpha})`)
+              grad.addColorStop(0.5, `rgba(255,255,200,${alpha * 0.5})`)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.beginPath()
+              ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'attackAfterimage') {
+              // 攻击残影
+              if (e.delay && e.life > e.maxLife - e.delay) {
+                ctx.restore()
+                continue
+              }
+              ctx.globalAlpha = alpha * 0.25
+              ctx.fillStyle = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.roundRect(-22, -70, 44, 45, 8)
+              ctx.fill()
+            } else if (e.type === 'fistWind') {
+              // 拳风气浪
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3
+              ctx.globalAlpha = alpha * 0.6
+              ctx.shadowBlur = 15
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.moveTo(0, 0)
+              ctx.quadraticCurveTo(20, -15, 40, 0)
+              ctx.quadraticCurveTo(20, 15, 0, 0)
+              ctx.stroke()
+            } else if (e.type === 'kickArc') {
+              // 腿风弧线
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 4
+              ctx.globalAlpha = alpha * 0.7
+              ctx.shadowBlur = 20
+              ctx.shadowColor = e.color
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing, 1)
+              ctx.beginPath()
+              ctx.arc(0, 0, 40, -Math.PI / 2, Math.PI / 4)
+              ctx.stroke()
             }
 
             ctx.restore()
@@ -1714,11 +2707,239 @@
           this.lastRightPress = 0
           this.dashCooldown = 0
 
+          // 组合技系统
+          this.inputBuffer = [] // 输入缓冲区
+          this.maxBufferSize = 6 // 最大记录6个输入
+          this.comboWindow = 600 // 600ms内的输入有效
+
           this.avatarImg = null
           if (this.avatarType === 'image') {
             this.avatarImg = new Image()
             this.avatarImg.src = this.avatar
           }
+        }
+
+        updateComboInput(left, right, down, up, punch, kick) {
+          const now = Date.now()
+
+          // 清理过期输入
+          this.inputBuffer = this.inputBuffer.filter(
+            (input) => now - input.time < this.comboWindow,
+          )
+
+          // 检测方向输入
+          let direction = null
+          if (left) direction = 'L'
+          else if (right) direction = 'R'
+          else if (down) direction = 'D'
+          else if (up) direction = 'U'
+
+          const lastInput = this.inputBuffer[this.inputBuffer.length - 1]
+
+          if (direction) {
+            if (!lastInput || lastInput.dir !== direction) {
+              this.inputBuffer.push({ dir: direction, time: now, punch, kick })
+              if (this.inputBuffer.length > this.maxBufferSize) {
+                this.inputBuffer.shift()
+              }
+            }
+          }
+
+          // 记录纯攻击输入（用于无前摇连招）
+          if (!direction && (punch || kick) && lastInput && lastInput.dir !== 'ATK') {
+            this.inputBuffer.push({ dir: 'ATK', time: now, punch, kick })
+            if (this.inputBuffer.length > this.maxBufferSize) {
+              this.inputBuffer.shift()
+            }
+          }
+        }
+
+        checkComboMove(punchPressed, kickPressed) {
+          const dirs = this.inputBuffer.map((i) => i.dir).join('')
+
+          // 定义组合技：模式 -> {招式, 需要的按键}
+          const combos = {
+            LRD: { move: 'dragonPunch', needPunch: true },    // 后前下+拳 = 升龙
+            RLD: { move: 'spinKick', needKick: true },        // 前后下+腿 = 旋风腿
+            DUD: { move: 'uppercut', needPunch: true },       // 下上下+拳 = 上勾拳
+            LRU: { move: 'backFlip', needKick: true },        // 后前上+腿 = 后空翻踢
+            DDR: { move: 'slide', needKick: true },           // 下下前+腿 = 滑铲
+            RRL: { move: 'counter', needPunch: true },        // 前后后+拳 = 反击
+            LLR: { move: 'chargePunch', needPunch: true },    // 后后前+拳 = 突进重拳
+            RDR: { move: 'wavePunch', needPunch: true },      // 前下前+拳 = 波动拳
+            LDL: { move: 'shadowKick', needKick: true },      // 后前下+腿 = 影袭踢（区别于升龙）
+            DDU: { move: 'earthquake', needPunch: true },     // 下下上+拳 = 震地裂
+            UUD: { move: 'meteorSmash', needPunch: true },    // 上上+拳 = 陨石坠
+            LRL: { move: 'whirlwind', needKick: true },       // 后前后+腿 = 龙卷风斩
+            DRU: { move: 'sonicKick', needKick: true },       // 下上+腿 = 音速踢
+            RRD: { move: 'tigerPalm', needPunch: true },      // 前前下+拳 = 虎啸掌
+            DLD: { move: 'lowSweep', needKick: true },        // 下后下+腿 = 地裂扫堂腿
+            RR:  { move: 'dashStrike', needPunch: true },     // 前前+拳 = 疾冲拳
+            LL:  { move: 'retreatKick', needKick: true },     // 后后+腿 = 后撤踢
+          }
+
+          for (const [pattern, data] of Object.entries(combos)) {
+            if (dirs.endsWith(pattern)) {
+              if (
+                (data.needPunch && punchPressed) ||
+                (data.needKick && kickPressed)
+              ) {
+                this.inputBuffer = [] // 清空缓冲区
+                return data.move
+              }
+            }
+          }
+          return null
+        }
+
+        performComboAttack(comboType) {
+          const combos = {
+            dragonPunch: {
+              name: '升龙拳',
+              damage: 120,
+              color: '#ff4444',
+              type: 'upper',
+            },
+            spinKick: {
+              name: '旋风腿',
+              damage: 110,
+              color: '#44ff44',
+              type: 'spin',
+            },
+            uppercut: {
+              name: '爆裂上勾',
+              damage: 130,
+              color: '#ffff44',
+              type: 'smash',
+            },
+            backFlip: {
+              name: '空翻踢',
+              damage: 100,
+              color: '#ff44ff',
+              type: 'flip',
+            },
+            slide: {
+              name: '滑铲',
+              damage: 90,
+              color: '#44ffff',
+              type: 'slide',
+            },
+            counter: {
+              name: '瞬身反击',
+              damage: 140,
+              color: '#ffffff',
+              type: 'counter',
+            },
+            chargePunch: {
+              name: '猛虎突进拳',
+              damage: 150,
+              color: '#ff6600',
+              type: 'charge',
+            },
+            wavePunch: {
+              name: '波动拳',
+              damage: 135,
+              color: '#0088ff',
+              type: 'wave',
+            },
+            shadowKick: {
+              name: '影袭踢',
+              damage: 125,
+              color: '#6600ff',
+              type: 'shadow',
+            },
+            earthquake: {
+              name: '震地裂',
+              damage: 145,
+              color: '#8b4513',
+              type: 'quake',
+            },
+            meteorSmash: {
+              name: '陨石坠击',
+              damage: 160,
+              color: '#ff0000',
+              type: 'meteor',
+            },
+            whirlwind: {
+              name: '龙卷风斩',
+              damage: 115,
+              color: '#00ffaa',
+              type: 'tornado',
+            },
+            sonicKick: {
+              name: '音速踢',
+              damage: 130,
+              color: '#ff00ff',
+              type: 'sonic',
+            },
+            tigerPalm: {
+              name: '虎啸掌',
+              damage: 140,
+              color: '#ffaa00',
+              type: 'tiger',
+            },
+            lowSweep: {
+              name: '地裂扫堂腿',
+              damage: 110,
+              color: '#00aaff',
+              type: 'sweep',
+            },
+            dashStrike: {
+              name: '疾冲拳',
+              damage: 105,
+              color: '#ffff00',
+              type: 'dashStrike',
+            },
+            retreatKick: {
+              name: '后撤踢',
+              damage: 95,
+              color: '#00ffff',
+              type: 'retreat',
+            },
+          }
+
+          const combo = combos[comboType]
+          if (!combo) return
+
+          this.state = 'combo'
+          this.stateTimer = 0
+          this.charging = false
+          this.currentMove = combo
+
+          // 消耗能量并回复少量（连招奖励）
+          this.energy = Math.min(this.energy + 15, this.maxEnergy)
+
+          if (this.isPlayer) {
+            this.game.showMoveName('✦ ' + combo.name + ' ✦', combo.color)
+          }
+
+          // ========== 超炫酷组合技特效 ==========
+          this.game.effects.addComboAttackEffect(
+            this.x,
+            this.y + this.height * 0.5,
+            this.facing,
+            combo,
+          )
+
+          // 根据招式类型决定震动强度
+          const shakeIntensity = {
+            upper: 12, spin: 10, smash: 18, flip: 8,
+            slide: 8, counter: 14, charge: 16, wave: 12,
+            shadow: 10, quake: 20, meteor: 22, tornado: 14,
+            sonic: 12, tiger: 15, sweep: 10, dashStrike: 10,
+            retreat: 8,
+          }
+          this.game.screenShake = shakeIntensity[combo.type] || 15
+
+          // 额外粒子爆发
+          this.game.particles.emit(
+            this.x + this.facing * 40,
+            this.y + this.height * 0.5,
+            combo.color,
+            25,
+            10,
+            25,
+          )
         }
 
         update(input, opponent) {
@@ -1743,7 +2964,7 @@
             return
           }
 
-          if (['punch', 'kick', 'ult', 'dash'].includes(this.state)) {
+          if (['punch', 'kick', 'ult', 'dash', 'combo'].includes(this.state)) {
             this.vx *= 0.9
             if (this.stateTimer >= this.getStateDuration()) {
               this.state = this.onGround ? 'idle' : 'jump'
@@ -1785,10 +3006,13 @@
 
           // 双击检测 - 闪避
           const now = Date.now()
-          const DOUBLE_PRESS_TIME = 250 // 250ms内算双击
+          const DOUBLE_PRESS_TIME = 250
 
           if (input.isPressed('ArrowLeft') || input.isPressed('KeyA')) {
-            if (now - this.lastLeftPress < DOUBLE_PRESS_TIME && this.dashCooldown <= 0) {
+            if (
+              now - this.lastLeftPress < DOUBLE_PRESS_TIME &&
+              this.dashCooldown <= 0
+            ) {
               this.performDash(-1)
               return
             }
@@ -1796,7 +3020,10 @@
           }
 
           if (input.isPressed('ArrowRight') || input.isPressed('KeyD')) {
-            if (now - this.lastRightPress < DOUBLE_PRESS_TIME && this.dashCooldown <= 0) {
+            if (
+              now - this.lastRightPress < DOUBLE_PRESS_TIME &&
+              this.dashCooldown <= 0
+            ) {
               this.performDash(1)
               return
             }
@@ -1825,11 +3052,31 @@
             this.state = 'jump'
           }
 
-          if (input.isPressed('KeyJ') || input.isPressed('KeyZ')) {
+          const punchPressed = input.isPressed('KeyJ') || input.isPressed('KeyZ')
+          const kickPressed = input.isPressed('KeyK') || input.isPressed('KeyX')
+
+          // 检测组合技输入序列
+          this.updateComboInput(
+            moveLeft,
+            moveRight,
+            moveDown,
+            moveUp,
+            input.isDown('KeyJ') || input.isDown('KeyZ'),
+            input.isDown('KeyK') || input.isDown('KeyX'),
+          )
+
+          // 检查是否有组合技
+          const comboMove = this.checkComboMove(punchPressed, kickPressed)
+          if (comboMove) {
+            this.performComboAttack(comboMove)
+            return
+          }
+
+          if (punchPressed) {
             this.performAttack('punch', moveDown, moveUp, !this.onGround)
           }
 
-          if (input.isPressed('KeyK') || input.isPressed('KeyX')) {
+          if (kickPressed) {
             this.performAttack('kick', moveDown, moveUp, !this.onGround)
           }
 
@@ -1852,9 +3099,13 @@
           if (this.dashCooldown > 0) this.dashCooldown--
 
           // AI闪避 - 当对手攻击时有一定概率闪避
-          if ((opponent.state === 'punch' || opponent.state === 'kick') && 
-              opponent.stateTimer < 5 && absDist < 100 && 
-              Math.random() < 0.25 && this.dashCooldown <= 0) {
+          if (
+            (opponent.state === 'punch' || opponent.state === 'kick') &&
+            opponent.stateTimer < 5 &&
+            absDist < 100 &&
+            Math.random() < 0.25 &&
+            this.dashCooldown <= 0
+          ) {
             // 向相反方向闪避
             this.performDash(this.facing > 0 ? -1 : 1)
             return
@@ -1870,7 +3121,21 @@
             if (this.onGround) this.state = 'run'
           } else if (absDist < 80) {
             this.vx *= 0.5
-            if (Math.random() < 0.06) {
+            // AI 有概率使用组合技（更炫酷）
+            if (Math.random() < 0.025) {
+              const combos = [
+                'dragonPunch',
+                'spinKick',
+                'uppercut',
+                'wavePunch',
+                'sonicKick',
+                'tigerPalm',
+                'chargePunch',
+                'whirlwind',
+              ]
+              const combo = combos[Math.floor(Math.random() * combos.length)]
+              this.performComboAttack(combo)
+            } else if (Math.random() < 0.06) {
               const attacks = ['punch', 'punch', 'kick']
               const attack = attacks[Math.floor(Math.random() * attacks.length)]
               const down = Math.random() < 0.3
@@ -1925,26 +3190,94 @@
             this.game.projectiles.add(type, px, py, this.facing, this.charId)
           }
 
-          // 特效 - 根据攻击类型生成不同特效
+          // ========== 攻击特效 - 炫酷到爆炸 ==========
           const hitX = this.x + this.facing * 60
           const hitY = this.y + this.height * 0.5
-          
-          // 华丽的击中特效
-          this.game.effects.addHitSpark(hitX, hitY, moveData.color)
-          
-          // 普攻也有不同特效
+          const comboLevel = Math.min(this.combo, 4)
+          const isCritical = comboLevel >= 3
+
+          // 1. 攻击前能量聚集
+          this.game.particles.emit(
+            this.x + this.facing * 30,
+            hitY,
+            moveData.color,
+            8 + comboLevel * 3,
+            4 + comboLevel * 2,
+            15,
+          )
+
+          // 2. 攻击拖尾残影
+          for (let i = 0; i < 3 + comboLevel; i++) {
+            this.game.effects.effects.push({
+              type: 'attackAfterimage',
+              x: this.x - this.facing * i * 12,
+              y: this.y,
+              facing: this.facing,
+              color: moveData.color,
+              life: 12,
+              maxLife: 12,
+              delay: i,
+            })
+          }
+
+          // 3. 击中特效（根据连击数增强）
+          this.game.effects.addHitSpark(hitX, hitY, moveData.color, isCritical)
+
+          // 4. 连击特效与震动
           if (!air && !down && !up) {
-            // 连击特效 - 根据连击数增加效果
-            const comboLevel = Math.min(this.combo, 3)
+            if (comboLevel >= 1) {
+              this.game.effects.addComboEffect(
+                hitX,
+                hitY,
+                moveData.color,
+                comboLevel,
+              )
+            }
+            // 连击越高震动越强
             if (comboLevel >= 2) {
-              // 2连击以上增加光圈
-              this.game.effects.addComboEffect(hitX, hitY, moveData.color, comboLevel)
+              this.game.screenShake = 3 + comboLevel * 2
             }
           }
-          
-          // 方向组合技额外特效
+
+          // 5. 方向组合技额外特效
           if (down || up || air) {
-            this.game.effects.addSpecialEffect(hitX, hitY, moveData.color, type, down, up, air)
+            this.game.effects.addSpecialEffect(
+              hitX,
+              hitY,
+              moveData.color,
+              type,
+              down,
+              up,
+              air,
+            )
+            // 方向技也有震动
+            this.game.screenShake = 5
+          }
+
+          // 6. 拳/腿特有武器光效
+          const fx = this.x + this.facing * 50
+          if (type === 'punch') {
+            // 拳风气浪
+            this.game.effects.effects.push({
+              type: 'fistWind',
+              x: fx,
+              y: hitY,
+              facing: this.facing,
+              color: moveData.color,
+              life: 15,
+              maxLife: 15,
+            })
+          } else if (type === 'kick') {
+            // 腿风弧线
+            this.game.effects.effects.push({
+              type: 'kickArc',
+              x: fx,
+              y: hitY + 20,
+              facing: this.facing,
+              color: moveData.color,
+              life: 18,
+              maxLife: 18,
+            })
           }
         }
 
@@ -1956,14 +3289,25 @@
           this.vx = direction * 18 // 快速冲刺
           this.invincible = 25 // 闪避期间无敌
           this.onGround = true // 保持地面状态
-          
+
           if (this.isPlayer) {
             this.game.showMoveName('闪!', '#00ffff')
           }
-          
+
           // 闪避特效
-          this.game.particles.emit(this.x, this.y + this.height * 0.5, '#00ffff', 15, 8, 20)
-          this.game.effects.addHitSpark(this.x, this.y + this.height * 0.5, '#00ffff')
+          this.game.particles.emit(
+            this.x,
+            this.y + this.height * 0.5,
+            '#00ffff',
+            15,
+            8,
+            20,
+          )
+          this.game.effects.addHitSpark(
+            this.x,
+            this.y + this.height * 0.5,
+            '#00ffff',
+          )
         }
 
         performUlt() {
@@ -1992,6 +3336,7 @@
           if (this.state === 'kick') return 22
           if (this.state === 'ult') return 80
           if (this.state === 'dash') return 20
+          if (this.state === 'combo') return 35
           return 10
         }
 
@@ -2051,20 +3396,20 @@
             // 在空中时明确设置 onGround 为 false
             this.onGround = false
           }
-          
+
           // 防止飞出屏幕顶部太远
           if (this.y < -400) {
             this.y = -400
             this.vy = 0
           }
-          
+
           // 闪避时保持在地面
           if (this.state === 'dash') {
             this.y = groundY - this.height
             this.vy = 0
             this.onGround = true
           }
-          
+
           this.x = Math.max(50, Math.min(this.game.width - 50, this.x))
         }
 
@@ -2106,23 +3451,30 @@
         }
 
         drawDetailedCharacter(ctx) {
-          const walkCycle = this.state === 'run' ? Math.sin(this.stateTimer * 0.4) : 0
+          const walkCycle =
+            this.state === 'run' ? Math.sin(this.stateTimer * 0.4) : 0
           const isPunching = this.state === 'punch'
           const isKicking = this.state === 'kick'
           const isDashing = this.state === 'dash'
           const isAttacking = isPunching || isKicking
-          const attackFrame = isAttacking ? this.stateTimer / this.getStateDuration() : 0
+          const attackFrame = isAttacking
+            ? this.stateTimer / this.getStateDuration()
+            : 0
 
           // 身体发光效果
           if (isAttacking || isDashing) {
             ctx.shadowBlur = 25
-            ctx.shadowColor = this.currentMove ? this.currentMove.color : this.color
+            ctx.shadowColor = this.currentMove
+              ? this.currentMove.color
+              : this.color
           }
 
           // 踢腿时腿部动画
-          let leftLegExtend = 0, rightLegExtend = 0
-          let leftLegAngle = 0, rightLegAngle = 0
-          
+          let leftLegExtend = 0,
+            rightLegExtend = 0
+          let leftLegAngle = 0,
+            rightLegAngle = 0
+
           if (isKicking) {
             // 踢腿动作 - 右腿向前踢
             const kickProgress = Math.sin(attackFrame * Math.PI) // 0->1->0
@@ -2140,7 +3492,8 @@
           ctx.lineCap = 'round'
 
           // 左腿（支撑腿）
-          const leftLegX = -15 + walkCycle * 10 + leftLegExtend * Math.cos(leftLegAngle)
+          const leftLegX =
+            -15 + walkCycle * 10 + leftLegExtend * Math.cos(leftLegAngle)
           const leftLegY = -20 + leftLegExtend * Math.sin(leftLegAngle)
           ctx.beginPath()
           ctx.moveTo(-10, -40)
@@ -2149,7 +3502,8 @@
           ctx.stroke()
 
           // 右腿（攻击腿/踢腿）
-          const rightLegX = 15 - walkCycle * 10 + rightLegExtend * Math.cos(rightLegAngle)
+          const rightLegX =
+            15 - walkCycle * 10 + rightLegExtend * Math.cos(rightLegAngle)
           const rightLegY = -20 + rightLegExtend * Math.sin(rightLegAngle)
           ctx.beginPath()
           ctx.moveTo(10, -40)
@@ -2169,7 +3523,13 @@
             ctx.lineWidth = 4
             ctx.globalAlpha = 0.6 - attackFrame
             ctx.beginPath()
-            ctx.arc(rightLegX, rightLegY + 20, 25 + attackFrame * 30, 0, Math.PI * 2)
+            ctx.arc(
+              rightLegX,
+              rightLegY + 20,
+              25 + attackFrame * 30,
+              0,
+              Math.PI * 2,
+            )
             ctx.stroke()
             ctx.restore()
           }
@@ -2200,7 +3560,7 @@
           // 手臂 - 出拳时动胳膊，踢腿时胳膊保持平衡
           ctx.lineWidth = 10
           let armExtend = 0
-          
+
           if (isPunching) {
             armExtend = Math.sin(attackFrame * Math.PI) * 45
           } else if (isKicking) {
@@ -2238,8 +3598,13 @@
             // 多层拳影
             for (let i = 1; i <= 3; i++) {
               ctx.beginPath()
-              ctx.arc(this.facing > 0 ? fistX - i * 15 : -fistX + i * 15, fistY, 
-                15 + i * 8 + attackFrame * 20, 0, Math.PI * 2)
+              ctx.arc(
+                this.facing > 0 ? fistX - i * 15 : -fistX + i * 15,
+                fistY,
+                15 + i * 8 + attackFrame * 20,
+                0,
+                Math.PI * 2,
+              )
               ctx.stroke()
             }
             // 冲击线
@@ -2267,7 +3632,11 @@
           ctx.fill()
 
           // 绘制头像
-          if (this.avatarType === 'image' && this.avatarImg && this.avatarImg.complete) {
+          if (
+            this.avatarType === 'image' &&
+            this.avatarImg &&
+            this.avatarImg.complete
+          ) {
             ctx.save()
             ctx.beginPath()
             ctx.arc(0, headY, 20, 0, Math.PI * 2)
@@ -2526,7 +3895,7 @@
           this.grandmaY = groundY - 80 // 奶奶的y坐标（脚底位置）
           this.houseX = this.width - 200
           this.showEndingText = false
-          
+
           // 隐藏血条UI
           document.getElementById('ui').style.display = 'none'
           if (document.getElementById('controlArea')) {
@@ -2561,7 +3930,8 @@
                 this.cpu.takeDamage(damage, p.facing * 5, -3)
                 this.player.combo++
                 this.player.comboTimer = 60
-                this.particles.emit(p.x, p.y, p.color, 10, 5, 15)
+                this.particles.emit(p.x, p.y, p.color, 18, 7, 20)
+                this.effects.addHitSpark(p.x, p.y, p.color, this.player.combo >= 3)
                 this.projectiles.projectiles.splice(i, 1)
               }
             } else {
@@ -2572,7 +3942,8 @@
                 this.player.takeDamage(damage, p.facing * 5, -3)
                 this.cpu.combo++
                 this.cpu.comboTimer = 60
-                this.particles.emit(p.x, p.y, p.color, 10, 5, 15)
+                this.particles.emit(p.x, p.y, p.color, 18, 7, 20)
+                this.effects.addHitSpark(p.x, p.y, p.color, this.cpu.combo >= 3)
                 this.projectiles.projectiles.splice(i, 1)
               }
             }
@@ -2600,6 +3971,50 @@
             }
           }
 
+          // 组合技伤害检测
+          if (
+            this.player.state === 'combo' &&
+            this.player.stateTimer === 15 &&
+            this.player.currentMove
+          ) {
+            const dist = Math.abs(this.player.x - this.cpu.x)
+            if (dist < 180) {
+              this.cpu.takeDamage(
+                this.player.currentMove.damage,
+                this.player.facing * 8,
+                -5,
+              )
+              this.effects.addHitSpark(
+                this.cpu.x,
+                this.cpu.y + this.cpu.height * 0.5,
+                this.player.currentMove.color,
+                true,
+              )
+              this.screenShake = 12
+            }
+          }
+          if (
+            this.cpu.state === 'combo' &&
+            this.cpu.stateTimer === 15 &&
+            this.cpu.currentMove
+          ) {
+            const dist = Math.abs(this.cpu.x - this.player.x)
+            if (dist < 180) {
+              this.player.takeDamage(
+                this.cpu.currentMove.damage,
+                this.cpu.facing * 8,
+                -5,
+              )
+              this.effects.addHitSpark(
+                this.player.x,
+                this.player.y + this.player.height * 0.5,
+                this.cpu.currentMove.color,
+                true,
+              )
+              this.screenShake = 12
+            }
+          }
+
           if (this.player.health <= 0 || this.cpu.health <= 0) {
             this.endGame()
           }
@@ -2611,7 +4026,7 @@
 
         updateEnding() {
           this.endingFrame++
-          
+
           if (this.endingPhase === 'walk') {
             // 翠翠走向奶奶
             const targetX = this.grandmaX - 60
@@ -2626,7 +4041,7 @@
             // 领着奶奶走向房子
             const targetX = this.houseX - 100
             const dx = targetX - this.cuiX
-            
+
             if (Math.abs(dx) > 2) {
               this.cuiX += Math.sign(dx) * 2
               this.grandmaX += Math.sign(dx) * 2
@@ -2691,16 +4106,16 @@
         drawEnding() {
           const ctx = this.ctx
           const groundY = this.height - 50
-          
+
           // 绘制房子
           this.drawHouse(ctx, this.houseX, groundY)
-          
+
           // 绘制奶奶
           this.drawGrandma(ctx, this.grandmaX, this.grandmaY)
-          
+
           // 绘制翠翠（胜利者）
           this.drawCuiEnding(ctx, this.cuiX, this.cuiY)
-          
+
           // 绘制连接线（手牵手）
           if (this.endingPhase === 'rescue' || this.endingPhase === 'done') {
             ctx.strokeStyle = '#ff69b4'
@@ -2716,7 +4131,7 @@
           // 房子主体
           ctx.fillStyle = '#8b4513'
           ctx.fillRect(x - 80, y - 120, 160, 120)
-          
+
           // 屋顶
           ctx.fillStyle = '#654321'
           ctx.beginPath()
@@ -2725,27 +4140,27 @@
           ctx.lineTo(x + 100, y - 120)
           ctx.closePath()
           ctx.fill()
-          
+
           // 屋顶边框
           ctx.strokeStyle = '#4a3018'
           ctx.lineWidth = 4
           ctx.stroke()
-          
+
           // 门
           ctx.fillStyle = '#4a3018'
           ctx.fillRect(x - 30, y - 60, 60, 60)
-          
+
           // 门把手
           ctx.fillStyle = '#ffd700'
           ctx.beginPath()
           ctx.arc(x + 20, y - 30, 5, 0, Math.PI * 2)
           ctx.fill()
-          
+
           // 窗户
           ctx.fillStyle = '#87ceeb'
           ctx.fillRect(x - 60, y - 100, 40, 40)
           ctx.fillRect(x + 20, y - 100, 40, 40)
-          
+
           // 窗框
           ctx.strokeStyle = '#fff'
           ctx.lineWidth = 3
@@ -2765,28 +4180,28 @@
 
         drawGrandma(ctx, x, y) {
           const walkOffset = Math.sin(this.endingFrame * 0.1) * 3
-          
+
           // 身体
           ctx.fillStyle = '#6b4423'
           ctx.fillRect(x - 20, y - 70 + walkOffset, 40, 50)
-          
+
           // 头
           ctx.fillStyle = '#f5d0b0'
           ctx.beginPath()
           ctx.arc(x, y - 85 + walkOffset, 18, 0, Math.PI * 2)
           ctx.fill()
-          
+
           // 白发
           ctx.fillStyle = '#ddd'
           ctx.beginPath()
           ctx.arc(x, y - 90 + walkOffset, 20, Math.PI, 0)
           ctx.fill()
-          
+
           // 脸部（奶奶表情）
           ctx.font = '20px Arial'
           ctx.textAlign = 'center'
           ctx.fillText('👵', x, y - 80 + walkOffset)
-          
+
           // 拐杖
           ctx.strokeStyle = '#8b4513'
           ctx.lineWidth = 4
@@ -2794,7 +4209,7 @@
           ctx.moveTo(x + 25, y - 30 + walkOffset)
           ctx.lineTo(x + 25, y + 10)
           ctx.stroke()
-          
+
           // 腿 - 应用走路动画
           ctx.strokeStyle = '#333'
           ctx.lineWidth = 8
@@ -2814,7 +4229,7 @@
         drawCuiEnding(ctx, x, y) {
           const walkOffset = Math.sin(this.endingFrame * 0.15) * 5
           const legLength = 45
-          
+
           // 腿
           ctx.strokeStyle = '#333'
           ctx.lineWidth = 10
@@ -2827,7 +4242,7 @@
           ctx.moveTo(x + 12, y - 40)
           ctx.lineTo(x + 15 - walkOffset, y - 40 + legLength)
           ctx.stroke()
-          
+
           // 身体
           const outfitGrad = ctx.createLinearGradient(0, y - 70, 0, y - 30)
           outfitGrad.addColorStop(0, '#ff1493')
@@ -2836,11 +4251,11 @@
           ctx.beginPath()
           ctx.roundRect(x - 22, y - 70, 44, 45, 8)
           ctx.fill()
-          
+
           // 腰带
           ctx.fillStyle = '#ffd700'
           ctx.fillRect(x - 22, y - 35, 44, 8)
-          
+
           // 手臂（牵着奶奶）
           ctx.strokeStyle = '#f5d0b0'
           ctx.lineWidth = 10
@@ -2852,22 +4267,26 @@
           ctx.moveTo(x + 18, y - 60)
           ctx.lineTo(x + 35, y - 35)
           ctx.stroke()
-          
+
           // 头
           ctx.fillStyle = '#f5d0b0'
           ctx.beginPath()
           ctx.arc(x, y - 82, 22, 0, Math.PI * 2)
           ctx.fill()
-          
+
           // 翠翠头像
-          if (this.player && this.player.avatarImg && this.player.avatarImg.complete) {
+          if (
+            this.player &&
+            this.player.avatarImg &&
+            this.player.avatarImg.complete
+          ) {
             ctx.save()
             ctx.beginPath()
             ctx.arc(x, y - 82, 20, 0, Math.PI * 2)
             ctx.clip()
             ctx.drawImage(this.player.avatarImg, x - 20, y - 102, 40, 40)
             ctx.restore()
-            
+
             ctx.strokeStyle = '#ff69b4'
             ctx.lineWidth = 3
             ctx.beginPath()
@@ -2877,7 +4296,7 @@
             ctx.font = '32px Arial'
             ctx.textAlign = 'center'
             ctx.fillText('🌸', x, y - 75)
-            
+
             ctx.strokeStyle = '#ff69b4'
             ctx.lineWidth = 3
             ctx.shadowBlur = 15
