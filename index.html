@@ -1,1917 +1,2170 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>翠翠复仇之路</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            touch-action: none;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        touch-action: none;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+      }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: #000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
-        }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Microsoft YaHei', sans-serif;
+      }
 
-        #gameContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+      #gameContainer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
 
-        #gameCanvas {
-            width: 100%;
-            height: 60vh;
-            background: linear-gradient(180deg, #1a1a2e 0%, #0a0a1a 100%);
-            display: block;
-        }
+      #gameCanvas {
+        width: 100%;
+        height: 60vh;
+        background: linear-gradient(180deg, #1a1a2e 0%, #0a0a1a 100%);
+        display: block;
+      }
 
+      #controlArea {
+        width: 100%;
+        height: 40vh;
+        min-height: 280px;
+        background: linear-gradient(
+          180deg,
+          rgba(20, 20, 40, 0.98) 0%,
+          rgba(10, 10, 20, 1) 100%
+        );
+        display: none;
+        flex-direction: column;
+        padding: 10px 15px max(15px, env(safe-area-inset-bottom));
+        gap: 8px;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @media (hover: none) and (pointer: coarse) {
         #controlArea {
-            width: 100%;
-            height: 40vh;
-            min-height: 280px;
-            background: linear-gradient(180deg, rgba(20,20,40,0.98) 0%, rgba(10,10,20,1) 100%);
-            display: none;
-            flex-direction: column;
-            padding: 10px 15px max(15px, env(safe-area-inset-bottom));
-            gap: 8px;
-            border-top: 2px solid rgba(255,255,255,0.1);
+          display: flex;
         }
+      }
 
-        @media (hover: none) and (pointer: coarse) {
-            #controlArea { display: flex; }
-        }
+      .control-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex: 1;
+      }
 
-        .control-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex: 1;
-        }
+      .dpad-area {
+        position: relative;
+        width: 140px;
+        height: 140px;
+      }
 
-        .dpad-area {
-            position: relative;
-            width: 140px;
-            height: 140px;
-        }
+      .dpad-btn {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: rgba(100, 100, 100, 0.3);
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.1s;
+      }
 
-        .dpad-btn {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            background: rgba(100,100,100,0.3);
-            border: 2px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.1s;
-        }
+      .dpad-btn:active,
+      .dpad-btn.pressed {
+        background: rgba(0, 200, 255, 0.4);
+        border-color: #00ccff;
+        transform: scale(0.95);
+      }
 
-        .dpad-btn:active, .dpad-btn.pressed {
-            background: rgba(0,200,255,0.4);
-            border-color: #00ccff;
-            transform: scale(0.95);
-        }
+      .dpad-up {
+        top: 0;
+        left: 45px;
+      }
+      .dpad-down {
+        bottom: 0;
+        left: 45px;
+      }
+      .dpad-left {
+        top: 45px;
+        left: 0;
+      }
+      .dpad-right {
+        top: 45px;
+        right: 0;
+      }
 
-        .dpad-up { top: 0; left: 45px; }
-        .dpad-down { bottom: 0; left: 45px; }
-        .dpad-left { top: 45px; left: 0; }
-        .dpad-right { top: 45px; right: 0; }
+      .skills-area {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
 
-        .skills-area {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+      .skill-row {
+        display: flex;
+        gap: 12px;
+      }
 
-        .skill-row {
-            display: flex;
-            gap: 12px;
-        }
+      .skill-btn {
+        width: 65px;
+        height: 55px;
+        border-radius: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        transition: all 0.1s;
+      }
 
-        .skill-btn {
-            width: 65px;
-            height: 55px;
-            border-radius: 15px;
-            border: 2px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 2px;
-            transition: all 0.1s;
-        }
+      .skill-btn:active,
+      .skill-btn.pressed {
+        transform: scale(0.92);
+      }
 
-        .skill-btn:active, .skill-btn.pressed {
-            transform: scale(0.92);
-        }
+      .skill-btn .label {
+        font-size: 16px;
+      }
+      .skill-btn .sub {
+        font-size: 10px;
+        opacity: 0.7;
+      }
 
-        .skill-btn .label { font-size: 16px; }
-        .skill-btn .sub { font-size: 10px; opacity: 0.7; }
+      .btn-punch {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 80, 80, 0.4),
+          rgba(200, 50, 50, 0.4)
+        );
+        border-color: rgba(255, 100, 100, 0.5);
+      }
+      .btn-punch:active,
+      .btn-punch.pressed {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 100, 100, 0.6),
+          rgba(220, 70, 70, 0.6)
+        );
+        box-shadow: 0 0 20px rgba(255, 80, 80, 0.5);
+      }
 
-        .btn-punch {
-            background: linear-gradient(135deg, rgba(255,80,80,0.4), rgba(200,50,50,0.4));
-            border-color: rgba(255,100,100,0.5);
-        }
-        .btn-punch:active, .btn-punch.pressed {
-            background: linear-gradient(135deg, rgba(255,100,100,0.6), rgba(220,70,70,0.6));
-            box-shadow: 0 0 20px rgba(255,80,80,0.5);
-        }
+      .btn-kick {
+        background: linear-gradient(
+          135deg,
+          rgba(80, 150, 255, 0.4),
+          rgba(50, 100, 200, 0.4)
+        );
+        border-color: rgba(100, 170, 255, 0.5);
+      }
+      .btn-kick:active,
+      .btn-kick.pressed {
+        background: linear-gradient(
+          135deg,
+          rgba(100, 170, 255, 0.6),
+          rgba(70, 120, 220, 0.6)
+        );
+        box-shadow: 0 0 20px rgba(80, 150, 255, 0.5);
+      }
 
-        .btn-kick {
-            background: linear-gradient(135deg, rgba(80,150,255,0.4), rgba(50,100,200,0.4));
-            border-color: rgba(100,170,255,0.5);
+      .btn-charge {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 200, 50, 0.4),
+          rgba(200, 150, 30, 0.4)
+        );
+        border-color: rgba(255, 220, 80, 0.5);
+      }
+      .btn-charge.charging {
+        animation: chargePulse 0.3s ease-in-out infinite;
+      }
+      @keyframes chargePulse {
+        0%,
+        100% {
+          box-shadow: 0 0 10px rgba(255, 200, 50, 0.5);
         }
-        .btn-kick:active, .btn-kick.pressed {
-            background: linear-gradient(135deg, rgba(100,170,255,0.6), rgba(70,120,220,0.6));
-            box-shadow: 0 0 20px rgba(80,150,255,0.5);
+        50% {
+          box-shadow: 0 0 30px rgba(255, 220, 80, 0.8);
         }
+      }
 
-        .btn-charge {
-            background: linear-gradient(135deg, rgba(255,200,50,0.4), rgba(200,150,30,0.4));
-            border-color: rgba(255,220,80,0.5);
+      .btn-ult {
+        background: linear-gradient(
+          135deg,
+          rgba(200, 50, 255, 0.4),
+          rgba(150, 30, 200, 0.4)
+        );
+        border-color: rgba(220, 80, 255, 0.5);
+        width: 140px;
+      }
+      .btn-ult.ready {
+        animation: ultReady 0.5s ease-in-out infinite;
+      }
+      @keyframes ultReady {
+        0%,
+        100% {
+          box-shadow: 0 0 15px rgba(200, 50, 255, 0.6);
         }
-        .btn-charge.charging { animation: chargePulse 0.3s ease-in-out infinite; }
-        @keyframes chargePulse {
-            0%, 100% { box-shadow: 0 0 10px rgba(255,200,50,0.5); }
-            50% { box-shadow: 0 0 30px rgba(255,220,80,0.8); }
+        50% {
+          box-shadow: 0 0 40px rgba(255, 100, 255, 0.9);
         }
+      }
 
-        .btn-ult {
-            background: linear-gradient(135deg, rgba(200,50,255,0.4), rgba(150,30,200,0.4));
-            border-color: rgba(220,80,255,0.5);
-            width: 140px;
-        }
-        .btn-ult.ready { animation: ultReady 0.5s ease-in-out infinite; }
-        @keyframes ultReady {
-            0%, 100% { box-shadow: 0 0 15px rgba(200,50,255,0.6); }
-            50% { box-shadow: 0 0 40px rgba(255,100,255,0.9); }
-        }
+      .pc-controls {
+        position: fixed;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        padding: 10px 15px;
+        display: none;
+        z-index: 100;
+      }
 
+      @media (min-width: 1024px) {
+        #gameCanvas {
+          height: 100vh;
+        }
         .pc-controls {
-            position: fixed;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            padding: 10px 15px;
-            display: none;
-            z-index: 100;
+          display: block;
         }
+      }
 
-        @media (min-width: 1024px) {
-            #gameCanvas { height: 100vh; }
-            .pc-controls { display: block; }
-        }
+      .pc-key-row {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 3px 0;
+      }
 
-        .pc-key-row {
-            color: rgba(255,255,255,0.8);
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin: 3px 0;
-        }
+      .pc-key-row .key {
+        display: inline-block;
+        min-width: 22px;
+        padding: 2px 6px;
+        background: rgba(100, 100, 100, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px;
+        color: #fff;
+        font-weight: bold;
+        text-align: center;
+      }
 
-        .pc-key-row .key {
-            display: inline-block;
-            min-width: 22px;
-            padding: 2px 6px;
-            background: rgba(100,100,100,0.3);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 4px;
-            color: #fff;
-            font-weight: bold;
-            text-align: center;
-        }
+      #ui {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60vh;
+        pointer-events: none;
+      }
 
+      @media (min-width: 1024px) {
         #ui {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60vh;
-            pointer-events: none;
+          height: 100vh;
         }
+      }
 
-        @media (min-width: 1024px) {
-            #ui { height: 100vh; }
+      .health-bar-container {
+        position: absolute;
+        top: 15px;
+        width: 35%;
+        max-width: 300px;
+      }
+      .health-bar-container.left {
+        left: 20px;
+      }
+      .health-bar-container.right {
+        right: 20px;
+      }
+
+      .player-name {
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+      }
+      .health-bar-container.right .player-name {
+        text-align: right;
+      }
+
+      .health-bar {
+        height: 16px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .health-fill {
+        height: 100%;
+        transition: width 0.2s;
+        border-radius: 6px;
+      }
+
+      .health-bar-container.left .health-fill {
+        background: linear-gradient(90deg, #ff3333, #ff6666);
+      }
+      .health-bar-container.right .health-fill {
+        background: linear-gradient(90deg, #ff6666, #ff3333);
+      }
+
+      .energy-bar {
+        margin-top: 6px;
+        height: 8px;
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .energy-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ffcc00, #ff9900);
+        transition: width 0.1s;
+      }
+
+      .timer {
+        position: absolute;
+        top: 15px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 36px;
+        font-weight: 900;
+        color: #fff;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+
+      .move-name {
+        position: absolute;
+        top: 30%;
+        left: 30%;
+        transform: translate(-50%, -50%);
+        font-size: clamp(28px, 7vw, 56px);
+        font-weight: 900;
+        color: #fff;
+        text-shadow:
+          0 0 10px currentColor,
+          0 0 20px currentColor,
+          0 0 40px currentColor,
+          4px 4px 0 #000;
+        pointer-events: none;
+        animation: moveNameAnim 1.2s ease-out forwards;
+        white-space: nowrap;
+        z-index: 100;
+      }
+
+      @keyframes moveNameAnim {
+        0% {
+          transform: translate(-50%, -50%) scale(0.2) rotate(-10deg);
+          opacity: 0;
         }
-
-        .health-bar-container {
-            position: absolute;
-            top: 15px;
-            width: 35%;
-            max-width: 300px;
+        30% {
+          transform: translate(-50%, -50%) scale(1.4) rotate(5deg);
+          opacity: 1;
         }
-        .health-bar-container.left { left: 20px; }
-        .health-bar-container.right { right: 20px; }
-
-        .player-name {
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 5px;
-            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        60% {
+          transform: translate(-50%, -50%) scale(1.1) rotate(0deg);
+          opacity: 1;
         }
-        .health-bar-container.right .player-name { text-align: right; }
-
-        .health-bar {
-            height: 16px;
-            background: rgba(0,0,0,0.6);
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
+        100% {
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+          opacity: 0;
         }
+      }
 
-        .health-fill {
-            height: 100%;
-            transition: width 0.2s;
-            border-radius: 6px;
-        }
+      .char-select {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          180deg,
+          #0a0a1a 0%,
+          #1a0a2e 50%,
+          #0a0a1a 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        z-index: 1000;
+      }
 
-        .health-bar-container.left .health-fill {
-            background: linear-gradient(90deg, #ff3333, #ff6666);
-        }
-        .health-bar-container.right .health-fill {
-            background: linear-gradient(90deg, #ff6666, #ff3333);
-        }
+      .char-select.hidden {
+        display: none;
+      }
 
-        .energy-bar {
-            margin-top: 6px;
-            height: 8px;
-            background: rgba(0,0,0,0.6);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 4px;
-            overflow: hidden;
-        }
+      .select-title {
+        font-size: clamp(28px, 6vw, 48px);
+        font-weight: 900;
+        color: #ffcc00;
+        text-shadow: 0 0 30px rgba(255, 200, 0, 0.5);
+        margin-bottom: 10px;
+        margin-top: 10px;
+      }
 
-        .energy-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #ffcc00, #ff9900);
-            transition: width 0.1s;
-        }
+      .select-subtitle {
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 20px;
+      }
 
-        .timer {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 36px;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 20px rgba(255,255,255,0.5);
-        }
+      .char-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        max-width: 600px;
+        width: 100%;
+      }
 
-        .move-name {
-            position: absolute;
-            top: 30%;
-            left: 30%;
-            transform: translate(-50%, -50%);
-            font-size: clamp(28px, 7vw, 56px);
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 
-                0 0 10px currentColor,
-                0 0 20px currentColor,
-                0 0 40px currentColor,
-                4px 4px 0 #000;
-            pointer-events: none;
-            animation: moveNameAnim 1.2s ease-out forwards;
-            white-space: nowrap;
-            z-index: 100;
-        }
+      .char-card {
+        aspect-ratio: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        padding: 10px;
+      }
 
-        @keyframes moveNameAnim {
-            0% { transform: translate(-50%, -50%) scale(0.2) rotate(-10deg); opacity: 0; }
-            30% { transform: translate(-50%, -50%) scale(1.4) rotate(5deg); opacity: 1; }
-            60% { transform: translate(-50%, -50%) scale(1.1) rotate(0deg); opacity: 1; }
-            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 0; }
-        }
+      .char-card:hover,
+      .char-card.selected {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: #ffcc00;
+        transform: scale(1.05);
+        box-shadow: 0 0 30px rgba(255, 200, 0, 0.3);
+      }
 
-        .char-select {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            z-index: 1000;
-        }
+      .char-card.selected {
+        background: rgba(255, 200, 0, 0.15);
+      }
 
-        .char-select.hidden { display: none; }
+      .char-avatar {
+        width: 70%;
+        height: 70%;
+        border-radius: 50%;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        overflow: hidden;
+      }
 
-        .select-title {
-            font-size: clamp(28px, 6vw, 48px);
-            font-weight: 900;
-            color: #ffcc00;
-            text-shadow: 0 0 30px rgba(255,200,0,0.5);
-            margin-bottom: 10px;
-            margin-top: 10px;
-        }
+      .char-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
 
-        .select-subtitle {
-            font-size: 16px;
-            color: rgba(255,255,255,0.6);
-            margin-bottom: 20px;
-        }
+      .char-name {
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+      }
 
-        .char-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            max-width: 600px;
-            width: 100%;
-        }
+      .start-btn {
+        margin-top: 25px;
+        padding: 15px 60px;
+        font-size: 20px;
+        font-weight: bold;
+        background: linear-gradient(135deg, #ffcc00, #ff9900);
+        border: none;
+        border-radius: 30px;
+        color: #000;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 0 30px rgba(255, 200, 0, 0.4);
+      }
 
-        .char-card {
-            aspect-ratio: 1;
-            background: rgba(255,255,255,0.05);
-            border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            padding: 10px;
-        }
+      .start-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 40px rgba(255, 200, 0, 0.6);
+      }
 
-        .char-card:hover, .char-card.selected {
-            background: rgba(255,255,255,0.1);
-            border-color: #ffcc00;
-            transform: scale(1.05);
-            box-shadow: 0 0 30px rgba(255,200,0,0.3);
-        }
+      .start-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
 
-        .char-card.selected {
-            background: rgba(255,200,0,0.15);
-        }
+      .result-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+      }
 
-        .char-avatar {
-            width: 70%;
-            height: 70%;
-            border-radius: 50%;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            overflow: hidden;
-        }
+      .result-screen.show {
+        display: flex;
+      }
 
-        .char-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+      .result-title {
+        font-size: clamp(48px, 10vw, 80px);
+        font-weight: 900;
+        margin-bottom: 20px;
+      }
 
-        .char-name {
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
+      .result-title.win {
+        color: #00ff88;
+        text-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+      }
+      .result-title.lose {
+        color: #ff4444;
+        text-shadow: 0 0 40px rgba(255, 68, 68, 0.5);
+      }
 
-        .start-btn {
-            margin-top: 25px;
-            padding: 15px 60px;
-            font-size: 20px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #ffcc00, #ff9900);
-            border: none;
-            border-radius: 30px;
-            color: #000;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 0 30px rgba(255,200,0,0.4);
-        }
-
-        .start-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 40px rgba(255,200,0,0.6);
-        }
-
-        .start-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .result-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.9);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-
-        .result-screen.show { display: flex; }
-
-        .result-title {
-            font-size: clamp(48px, 10vw, 80px);
-            font-weight: 900;
-            margin-bottom: 20px;
-        }
-
-        .result-title.win { color: #00ff88; text-shadow: 0 0 40px rgba(0,255,136,0.5); }
-        .result-title.lose { color: #ff4444; text-shadow: 0 0 40px rgba(255,68,68,0.5); }
-
-        .restart-btn {
-            margin-top: 30px;
-            padding: 15px 50px;
-            font-size: 18px;
-            background: linear-gradient(135deg, #00ccff, #0099ff);
-            border: none;
-            border-radius: 25px;
-            color: white;
-            cursor: pointer;
-            font-weight: bold;
-        }
+      .restart-btn {
+        margin-top: 30px;
+        padding: 15px 50px;
+        font-size: 18px;
+        background: linear-gradient(135deg, #00ccff, #0099ff);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
+      <canvas id="gameCanvas"></canvas>
 
-        <div id="ui">
-            <div class="timer" id="timer">60</div>
-            
-            <div class="health-bar-container left">
-                <div class="player-name" id="p1Name">玩家</div>
-                <div class="health-bar">
-                    <div class="health-fill" id="p1Health" style="width: 100%"></div>
-                </div>
-                <div class="energy-bar">
-                    <div class="energy-fill" id="p1Energy" style="width: 0%"></div>
-                </div>
+      <div id="ui">
+        <div class="timer" id="timer">60</div>
+
+        <div class="health-bar-container left">
+          <div class="player-name" id="p1Name">玩家</div>
+          <div class="health-bar">
+            <div class="health-fill" id="p1Health" style="width: 100%"></div>
+          </div>
+          <div class="energy-bar">
+            <div class="energy-fill" id="p1Energy" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="health-bar-container right">
+          <div class="player-name" id="p2Name">电脑</div>
+          <div class="health-bar">
+            <div class="health-fill" id="p2Health" style="width: 100%"></div>
+          </div>
+          <div class="energy-bar">
+            <div class="energy-fill" id="p2Energy" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="char-select" id="charSelect">
+        <h1 class="select-title">🏆 翠翠复仇之路</h1>
+        <p class="select-subtitle" id="selectHint">请选择玩家角色</p>
+        <div class="char-grid" id="charGrid"></div>
+        <button class="start-btn" id="startBtn" disabled>开始对战</button>
+      </div>
+
+      <div class="result-screen" id="resultScreen">
+        <div class="result-title" id="resultTitle">胜利!</div>
+        <button class="restart-btn" id="restartBtn">再来一局</button>
+      </div>
+
+      <div id="controlArea">
+        <div class="control-row">
+          <div class="dpad-area">
+            <button class="dpad-btn dpad-up" id="btnUp">▲</button>
+            <button class="dpad-btn dpad-down" id="btnDown">▼</button>
+            <button class="dpad-btn dpad-left" id="btnLeft">◀</button>
+            <button class="dpad-btn dpad-right" id="btnRight">▶</button>
+          </div>
+          <div class="skills-area">
+            <div class="skill-row">
+              <button class="skill-btn btn-punch" id="btnPunch">
+                <span class="label">👊</span>
+                <span class="sub">拳</span>
+              </button>
+              <button class="skill-btn btn-kick" id="btnKick">
+                <span class="label">🦶</span>
+                <span class="sub">腿</span>
+              </button>
             </div>
-
-            <div class="health-bar-container right">
-                <div class="player-name" id="p2Name">电脑</div>
-                <div class="health-bar">
-                    <div class="health-fill" id="p2Health" style="width: 100%"></div>
-                </div>
-                <div class="energy-bar">
-                    <div class="energy-fill" id="p2Energy" style="width: 0%"></div>
-                </div>
+            <div class="skill-row">
+              <button class="skill-btn btn-charge" id="btnCharge">
+                <span class="label">⚡</span>
+                <span class="sub">集气</span>
+              </button>
+              <button class="skill-btn btn-ult" id="btnUlt">
+                <span class="label">🔥</span>
+                <span class="sub">大招</span>
+              </button>
             </div>
+          </div>
         </div>
+      </div>
 
-        <div class="char-select" id="charSelect">
-            <h1 class="select-title">🏆 翠翠复仇之路</h1>
-            <p class="select-subtitle" id="selectHint">请选择玩家角色</p>
-            <div class="char-grid" id="charGrid"></div>
-            <button class="start-btn" id="startBtn" disabled>开始对战</button>
+      <div class="pc-controls">
+        <div class="pc-key-row">
+          <span class="key">←</span><span class="key">→</span> 移动
+          <span class="key">↑</span> 跳跃 <span class="key">↓</span> 下蹲
         </div>
-
-        <div class="result-screen" id="resultScreen">
-            <div class="result-title" id="resultTitle">胜利!</div>
-            <button class="restart-btn" id="restartBtn">再来一局</button>
+        <div class="pc-key-row">
+          <span class="key">A</span> 拳 <span class="key">S</span> 腿
+          <span class="key">D</span> 集气 <span class="key">F</span> 大招
         </div>
-
-        <div id="controlArea">
-            <div class="control-row">
-                <div class="dpad-area">
-                    <button class="dpad-btn dpad-up" id="btnUp">▲</button>
-                    <button class="dpad-btn dpad-down" id="btnDown">▼</button>
-                    <button class="dpad-btn dpad-left" id="btnLeft">◀</button>
-                    <button class="dpad-btn dpad-right" id="btnRight">▶</button>
-                </div>
-                <div class="skills-area">
-                    <div class="skill-row">
-                        <button class="skill-btn btn-punch" id="btnPunch">
-                            <span class="label">👊</span>
-                            <span class="sub">拳</span>
-                        </button>
-                        <button class="skill-btn btn-kick" id="btnKick">
-                            <span class="label">🦶</span>
-                            <span class="sub">腿</span>
-                        </button>
-                    </div>
-                    <div class="skill-row">
-                        <button class="skill-btn btn-charge" id="btnCharge">
-                            <span class="label">⚡</span>
-                            <span class="sub">集气</span>
-                        </button>
-                        <button class="skill-btn btn-ult" id="btnUlt">
-                            <span class="label">🔥</span>
-                            <span class="sub">大招</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="pc-controls">
-            <div class="pc-key-row"><span class="key">←</span><span class="key">→</span> 移动 <span class="key">↑</span> 跳跃 <span class="key">↓</span> 下蹲</div>
-            <div class="pc-key-row"><span class="key">A</span> 拳 <span class="key">S</span> 腿 <span class="key">D</span> 集气 <span class="key">F</span> 大招</div>
-            <div class="pc-key-row">方向+技能 = 组合技</div>
-        </div>
+        <div class="pc-key-row">方向+技能 = 组合技</div>
+      </div>
     </div>
 
     <script>
-        // ==================== 角色配置 ====================
-        const CHARACTERS = {
-            cui: {
-                id: 'cui',
-                name: '翠翠',
-                color: '#ff69b4',
-                avatarType: 'image',
-                avatar: './cuicui.jpg',
-                bodyColor: '#ffb6c1',
-                outfitColor: '#ff1493',
-                maxHealth: 1000,
-                speed: 6.5,
-                moves: {
-                    punch: { name: '樱花冲', damage: 65, color: '#ff69b4' },
-                    kick: { name: '粉蝶踢', damage: 85, color: '#ff1493' },
-                    downPunch: { name: '落樱掌', damage: 75, color: '#ffb6c1' },
-                    upPunch: { name: '樱花升空', damage: 80, color: '#ff69b4' },
-                    airKick: { name: '旋转芭蕾', damage: 95, color: '#ff69b4' },
-                },
-                ult: { name: '★ 樱花风暴 ★', damage: 350, color: '#ff69b4' }
-            },
-            fu: {
-                id: 'fu',
-                name: '富生',
-                color: '#4169e1',
-                avatarType: 'emoji',
-                avatar: '👦',
-                bodyColor: '#f5d0b0',
-                outfitColor: '#4169e1',
-                maxHealth: 1250,
-                speed: 5,
-                moves: {
-                    punch: { name: '猛虎拳', damage: 85, color: '#4169e1' },
-                    kick: { name: '重炮踢', damage: 105, color: '#1e90ff' },
-                    downPunch: { name: '地裂击', damage: 95, color: '#0000cd' },
-                    upPunch: { name: '升龙霸', damage: 115, color: '#4169e1' },
-                    airKick: { name: '泰山压顶', damage: 125, color: '#1e90ff' },
-                },
-                ult: { name: '★ 霸王裂地拳 ★', damage: 400, color: '#00008b' }
-            },
-            jia: {
-                id: 'jia',
-                name: '嘉姐',
-                color: '#9370db',
-                avatarType: 'emoji',
-                avatar: '👧',
-                bodyColor: '#f5d0b0',
-                outfitColor: '#9370db',
-                maxHealth: 950,
-                speed: 7.5,
-                moves: {
-                    punch: { name: '紫电指', damage: 70, color: '#9370db' },
-                    kick: { name: '雷光踢', damage: 90, color: '#8a2be2' },
-                    downPunch: { name: '雷击地', damage: 80, color: '#9932cc' },
-                    upPunch: { name: '紫电升天', damage: 85, color: '#9370db' },
-                    airKick: { name: '幻影旋', damage: 100, color: '#8a2be2' },
-                },
-                ult: { name: '★ 紫电灭世劫 ★', damage: 370, color: '#9400d3' }
-            },
-            shu: {
-                id: 'shu',
-                name: '二叔',
-                color: '#228b22',
-                avatarType: 'emoji',
-                avatar: '👴',
-                bodyColor: '#d2b48c',
-                outfitColor: '#228b22',
-                maxHealth: 1150,
-                speed: 5.5,
-                moves: {
-                    punch: { name: '木龙掌', damage: 75, color: '#228b22' },
-                    kick: { name: '藤蔓鞭', damage: 95, color: '#32cd32' },
-                    downPunch: { name: '生根击', damage: 85, color: '#006400' },
-                    upPunch: { name: '藤蔓缠', damage: 90, color: '#228b22' },
-                    airKick: { name: '飞叶斩', damage: 105, color: '#32cd32' },
-                },
-                ult: { name: '★ 万木朝宗阵 ★', damage: 380, color: '#006400' }
-            },
-            shen: {
-                id: 'shen',
-                name: '二婶',
-                color: '#ff4500',
-                avatarType: 'emoji',
-                avatar: '👩',
-                bodyColor: '#f5d0b0',
-                outfitColor: '#ff4500',
-                maxHealth: 1050,
-                speed: 6,
-                moves: {
-                    punch: { name: '炎爆拳', damage: 80, color: '#ff6347' },
-                    kick: { name: '烈焰踢', damage: 100, color: '#ff4500' },
-                    downPunch: { name: '地火喷', damage: 90, color: '#dc143c' },
-                    upPunch: { name: '炎柱冲', damage: 95, color: '#ff6347' },
-                    airKick: { name: '火凤旋', damage: 110, color: '#ff4500' },
-                },
-                ult: { name: '★ 焚天烈焰舞 ★', damage: 390, color: '#dc143c' }
-            }
-        };
+      // ==================== 角色配置 ====================
+      const CHARACTERS = {
+        cui: {
+          id: 'cui',
+          name: '翠翠',
+          color: '#ff69b4',
+          avatarType: 'image',
+          avatar: './cuicui.jpg',
+          bodyColor: '#ffb6c1',
+          outfitColor: '#ff1493',
+          maxHealth: 1000,
+          speed: 6.5,
+          moves: {
+            punch: { name: '樱花冲', damage: 65, color: '#ff69b4' },
+            kick: { name: '粉蝶踢', damage: 85, color: '#ff1493' },
+            downPunch: { name: '落樱掌', damage: 75, color: '#ffb6c1' },
+            upPunch: { name: '樱花升空', damage: 80, color: '#ff69b4' },
+            airKick: { name: '旋转芭蕾', damage: 95, color: '#ff69b4' },
+          },
+          ult: { name: '★ 樱花风暴 ★', damage: 350, color: '#ff69b4' },
+        },
+        fu: {
+          id: 'fu',
+          name: '富生',
+          color: '#4169e1',
+          avatarType: 'emoji',
+          avatar: '👦',
+          bodyColor: '#f5d0b0',
+          outfitColor: '#4169e1',
+          maxHealth: 1250,
+          speed: 5,
+          moves: {
+            punch: { name: '猛虎拳', damage: 85, color: '#4169e1' },
+            kick: { name: '重炮踢', damage: 105, color: '#1e90ff' },
+            downPunch: { name: '地裂击', damage: 95, color: '#0000cd' },
+            upPunch: { name: '升龙霸', damage: 115, color: '#4169e1' },
+            airKick: { name: '泰山压顶', damage: 125, color: '#1e90ff' },
+          },
+          ult: { name: '★ 霸王裂地拳 ★', damage: 400, color: '#00008b' },
+        },
+        jia: {
+          id: 'jia',
+          name: '嘉姐',
+          color: '#9370db',
+          avatarType: 'emoji',
+          avatar: '👧',
+          bodyColor: '#f5d0b0',
+          outfitColor: '#9370db',
+          maxHealth: 950,
+          speed: 7.5,
+          moves: {
+            punch: { name: '紫电指', damage: 70, color: '#9370db' },
+            kick: { name: '雷光踢', damage: 90, color: '#8a2be2' },
+            downPunch: { name: '雷击地', damage: 80, color: '#9932cc' },
+            upPunch: { name: '紫电升天', damage: 85, color: '#9370db' },
+            airKick: { name: '幻影旋', damage: 100, color: '#8a2be2' },
+          },
+          ult: { name: '★ 紫电灭世劫 ★', damage: 370, color: '#9400d3' },
+        },
+        shu: {
+          id: 'shu',
+          name: '二叔',
+          color: '#228b22',
+          avatarType: 'emoji',
+          avatar: '👴',
+          bodyColor: '#d2b48c',
+          outfitColor: '#228b22',
+          maxHealth: 1150,
+          speed: 5.5,
+          moves: {
+            punch: { name: '木龙掌', damage: 75, color: '#228b22' },
+            kick: { name: '藤蔓鞭', damage: 95, color: '#32cd32' },
+            downPunch: { name: '生根击', damage: 85, color: '#006400' },
+            upPunch: { name: '藤蔓缠', damage: 90, color: '#228b22' },
+            airKick: { name: '飞叶斩', damage: 105, color: '#32cd32' },
+          },
+          ult: { name: '★ 万木朝宗阵 ★', damage: 380, color: '#006400' },
+        },
+        shen: {
+          id: 'shen',
+          name: '二婶',
+          color: '#ff4500',
+          avatarType: 'emoji',
+          avatar: '👩',
+          bodyColor: '#f5d0b0',
+          outfitColor: '#ff4500',
+          maxHealth: 1050,
+          speed: 6,
+          moves: {
+            punch: { name: '炎爆拳', damage: 80, color: '#ff6347' },
+            kick: { name: '烈焰踢', damage: 100, color: '#ff4500' },
+            downPunch: { name: '地火喷', damage: 90, color: '#dc143c' },
+            upPunch: { name: '炎柱冲', damage: 95, color: '#ff6347' },
+            airKick: { name: '火凤旋', damage: 110, color: '#ff4500' },
+          },
+          ult: { name: '★ 焚天烈焰舞 ★', damage: 390, color: '#dc143c' },
+        },
+      }
 
-        // ==================== 输入处理 ====================
-        class InputHandler {
-            constructor() {
-                this.keys = {};
-                this.keysPressed = {};
-                
-                window.addEventListener('keydown', (e) => {
-                    this.keys[e.code] = true;
-                    if (!this.keysPressed[e.code]) this.keysPressed[e.code] = true;
-                });
-                
-                window.addEventListener('keyup', (e) => {
-                    this.keys[e.code] = false;
-                    this.keysPressed[e.code] = false;
-                });
+      // ==================== 输入处理 ====================
+      class InputHandler {
+        constructor() {
+          this.keys = {}
+          this.keysPressed = {}
 
-                window.addEventListener('keydown', (e) => {
-                    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) {
-                        e.preventDefault();
-                    }
-                });
-            }
+          window.addEventListener('keydown', (e) => {
+            this.keys[e.code] = true
+            if (!this.keysPressed[e.code]) this.keysPressed[e.code] = true
+          })
 
-            isDown(code) { return !!this.keys[code]; }
-            
-            isPressed(code) {
-                if (this.keysPressed[code]) {
-                    this.keysPressed[code] = false;
-                    return true;
-                }
-                return false;
+          window.addEventListener('keyup', (e) => {
+            this.keys[e.code] = false
+            this.keysPressed[e.code] = false
+          })
+
+          window.addEventListener('keydown', (e) => {
+            if (
+              [
+                'ArrowUp',
+                'ArrowDown',
+                'ArrowLeft',
+                'ArrowRight',
+                'Space',
+              ].includes(e.code)
+            ) {
+              e.preventDefault()
             }
+          })
         }
 
-        // ==================== 粒子系统 ====================
-        class ParticleSystem {
-            constructor() {
-                this.particles = [];
-            }
-
-            emit(x, y, color, count, speed, life) {
-                for (let i = 0; i < count; i++) {
-                    const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5;
-                    const vel = speed * (0.5 + Math.random() * 0.5);
-                    this.particles.push({
-                        x, y,
-                        vx: Math.cos(angle) * vel,
-                        vy: Math.sin(angle) * vel,
-                        life, maxLife: life,
-                        color, size: 3 + Math.random() * 5
-                    });
-                }
-            }
-
-            emitRect(x, y, color, count, speedX, speedY, life) {
-                for (let i = 0; i < count; i++) {
-                    this.particles.push({
-                        x, y,
-                        vx: (Math.random() - 0.5) * speedX,
-                        vy: (Math.random() - 0.5) * speedY,
-                        life, maxLife: life,
-                        color, size: 4 + Math.random() * 6
-                    });
-                }
-            }
-
-            update() {
-                for (let i = this.particles.length - 1; i >= 0; i--) {
-                    const p = this.particles[i];
-                    p.x += p.vx;
-                    p.y += p.vy;
-                    p.vy += 0.4;
-                    p.life--;
-                    if (p.life <= 0) this.particles.splice(i, 1);
-                }
-            }
-
-            draw(ctx) {
-                for (const p of this.particles) {
-                    const alpha = p.life / p.maxLife;
-                    ctx.globalAlpha = alpha;
-                    ctx.fillStyle = p.color;
-                    ctx.shadowBlur = 10;
-                    ctx.shadowColor = p.color;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                ctx.shadowBlur = 0;
-                ctx.globalAlpha = 1;
-            }
+        isDown(code) {
+          return !!this.keys[code]
         }
 
-        // ==================== 投射物/广播系统 ====================
-        class ProjectileSystem {
-            constructor() {
-                this.projectiles = [];
+        isPressed(code) {
+          if (this.keysPressed[code]) {
+            this.keysPressed[code] = false
+            return true
+          }
+          return false
+        }
+      }
+
+      // ==================== 粒子系统 ====================
+      class ParticleSystem {
+        constructor() {
+          this.particles = []
+        }
+
+        emit(x, y, color, count, speed, life) {
+          for (let i = 0; i < count; i++) {
+            const angle = (Math.PI * 2 * i) / count + Math.random() * 0.5
+            const vel = speed * (0.5 + Math.random() * 0.5)
+            this.particles.push({
+              x,
+              y,
+              vx: Math.cos(angle) * vel,
+              vy: Math.sin(angle) * vel,
+              life,
+              maxLife: life,
+              color,
+              size: 3 + Math.random() * 5,
+            })
+          }
+        }
+
+        emitRect(x, y, color, count, speedX, speedY, life) {
+          for (let i = 0; i < count; i++) {
+            this.particles.push({
+              x,
+              y,
+              vx: (Math.random() - 0.5) * speedX,
+              vy: (Math.random() - 0.5) * speedY,
+              life,
+              maxLife: life,
+              color,
+              size: 4 + Math.random() * 6,
+            })
+          }
+        }
+
+        update() {
+          for (let i = this.particles.length - 1; i >= 0; i--) {
+            const p = this.particles[i]
+            p.x += p.vx
+            p.y += p.vy
+            p.vy += 0.4
+            p.life--
+            if (p.life <= 0) this.particles.splice(i, 1)
+          }
+        }
+
+        draw(ctx) {
+          for (const p of this.particles) {
+            const alpha = p.life / p.maxLife
+            ctx.globalAlpha = alpha
+            ctx.fillStyle = p.color
+            ctx.shadowBlur = 10
+            ctx.shadowColor = p.color
+            ctx.beginPath()
+            ctx.arc(p.x, p.y, p.size * alpha, 0, Math.PI * 2)
+            ctx.fill()
+          }
+          ctx.shadowBlur = 0
+          ctx.globalAlpha = 1
+        }
+      }
+
+      // ==================== 投射物/广播系统 ====================
+      class ProjectileSystem {
+        constructor() {
+          this.projectiles = []
+        }
+
+        add(type, x, y, facing, charId) {
+          const configs = {
+            cui: { color: '#ff69b4', speed: 12, size: 40, type: 'petal' },
+            fu: { color: '#4169e1', speed: 10, size: 60, type: 'fist' },
+            jia: { color: '#9370db', speed: 15, size: 35, type: 'lightning' },
+            shu: { color: '#228b22', speed: 11, size: 45, type: 'leaf' },
+            shen: { color: '#ff4500', speed: 13, size: 50, type: 'fireball' },
+          }
+
+          const config = configs[charId] || configs.cui
+
+          this.projectiles.push({
+            type: config.type,
+            x,
+            y,
+            vx: facing * config.speed,
+            facing,
+            color: config.color,
+            size: config.size,
+            life: 60,
+            charId,
+            trail: [],
+          })
+        }
+
+        update() {
+          for (let i = this.projectiles.length - 1; i >= 0; i--) {
+            const p = this.projectiles[i]
+
+            p.trail.push({ x: p.x, y: p.y })
+            if (p.trail.length > 8) p.trail.shift()
+
+            p.x += p.vx
+            p.life--
+
+            if (p.life <= 0 || p.x < -100 || p.x > 1380) {
+              this.projectiles.splice(i, 1)
+            }
+          }
+        }
+
+        draw(ctx) {
+          for (const p of this.projectiles) {
+            ctx.save()
+
+            // 绘制轨迹
+            if (p.trail.length > 1) {
+              ctx.strokeStyle = p.color
+              ctx.lineWidth = p.size * 0.3
+              ctx.globalAlpha = 0.4
+              ctx.beginPath()
+              ctx.moveTo(p.trail[0].x, p.trail[0].y)
+              for (let i = 1; i < p.trail.length; i++) {
+                ctx.lineTo(p.trail[i].x, p.trail[i].y)
+              }
+              ctx.lineTo(p.x, p.y)
+              ctx.stroke()
             }
 
-            add(type, x, y, facing, charId) {
-                const configs = {
-                    cui: { color: '#ff69b4', speed: 12, size: 40, type: 'petal' },
-                    fu: { color: '#4169e1', speed: 10, size: 60, type: 'fist' },
-                    jia: { color: '#9370db', speed: 15, size: 35, type: 'lightning' },
-                    shu: { color: '#228b22', speed: 11, size: 45, type: 'leaf' },
-                    shen: { color: '#ff4500', speed: 13, size: 50, type: 'fireball' }
-                };
-                
-                const config = configs[charId] || configs.cui;
-                
-                this.projectiles.push({
-                    type: config.type,
-                    x, y,
-                    vx: facing * config.speed,
-                    facing,
-                    color: config.color,
-                    size: config.size,
+            ctx.globalAlpha = 1
+            ctx.translate(p.x, p.y)
+
+            if (p.type === 'petal') {
+              // 樱花瓣
+              ctx.fillStyle = p.color
+              ctx.shadowBlur = 20
+              ctx.shadowColor = p.color
+              for (let i = 0; i < 3; i++) {
+                ctx.rotate(Math.PI / 3)
+                ctx.beginPath()
+                ctx.ellipse(
+                  p.size / 2,
+                  0,
+                  p.size / 2,
+                  p.size / 4,
+                  0,
+                  0,
+                  Math.PI * 2,
+                )
+                ctx.fill()
+              }
+            } else if (p.type === 'fist') {
+              // 能量拳
+              ctx.scale(p.facing, 1)
+              const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size)
+              grad.addColorStop(0, '#fff')
+              grad.addColorStop(0.3, p.color)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.shadowBlur = 30
+              ctx.shadowColor = p.color
+              ctx.beginPath()
+              ctx.arc(0, 0, p.size, 0, Math.PI * 2)
+              ctx.fill()
+              // 拳头轮廓
+              ctx.strokeStyle = '#fff'
+              ctx.lineWidth = 3
+              ctx.beginPath()
+              ctx.arc(0, 0, p.size * 0.7, 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (p.type === 'lightning') {
+              // 雷电
+              ctx.strokeStyle = p.color
+              ctx.lineWidth = 4
+              ctx.shadowBlur = 25
+              ctx.shadowColor = p.color
+              ctx.beginPath()
+              ctx.moveTo(-p.size, -p.size / 2)
+              ctx.lineTo(-p.size / 3, 0)
+              ctx.lineTo(-p.size / 2, p.size / 2)
+              ctx.lineTo(p.size / 3, -p.size / 3)
+              ctx.lineTo(p.size, p.size / 2)
+              ctx.stroke()
+              // 内核
+              ctx.strokeStyle = '#fff'
+              ctx.lineWidth = 2
+              ctx.stroke()
+            } else if (p.type === 'leaf') {
+              // 飞叶
+              ctx.fillStyle = p.color
+              ctx.shadowBlur = 15
+              ctx.shadowColor = p.color
+              ctx.rotate(p.life * 0.2)
+              ctx.beginPath()
+              ctx.ellipse(0, 0, p.size, p.size / 3, 0, 0, Math.PI * 2)
+              ctx.fill()
+              // 叶脉
+              ctx.strokeStyle = '#90ee90'
+              ctx.lineWidth = 2
+              ctx.beginPath()
+              ctx.moveTo(-p.size + 5, 0)
+              ctx.lineTo(p.size - 5, 0)
+              ctx.stroke()
+            } else if (p.type === 'fireball') {
+              // 火球
+              const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size)
+              grad.addColorStop(0, '#ffff00')
+              grad.addColorStop(0.4, '#ff8800')
+              grad.addColorStop(0.8, p.color)
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.shadowBlur = 40
+              ctx.shadowColor = '#ff4500'
+              ctx.beginPath()
+              ctx.arc(0, 0, p.size, 0, Math.PI * 2)
+              ctx.fill()
+              // 火焰核心
+              ctx.fillStyle = '#ffff00'
+              ctx.beginPath()
+              ctx.arc(0, 0, p.size * 0.4, 0, Math.PI * 2)
+              ctx.fill()
+            }
+
+            ctx.restore()
+          }
+          ctx.shadowBlur = 0
+        }
+
+        checkHit(projectile, fighter) {
+          const dist = Math.hypot(
+            projectile.x - fighter.x,
+            projectile.y - (fighter.y + fighter.height / 2),
+          )
+          return dist < projectile.size + fighter.width / 2
+        }
+      }
+
+      // ==================== 特效系统 ====================
+      class EffectSystem {
+        constructor() {
+          this.effects = []
+        }
+
+        addHitSpark(x, y, color) {
+          for (let i = 0; i < 8; i++) {
+            this.effects.push({
+              type: 'spark',
+              x,
+              y,
+              vx: (Math.random() - 0.5) * 15,
+              vy: (Math.random() - 0.5) * 15,
+              color,
+              life: 15,
+              maxLife: 15,
+            })
+          }
+        }
+
+        addUltimate(charId, x, y, facing, isPlayer) {
+          const effects = {
+            cui: () => {
+              // 樱花风暴 - 全屏樱花
+              for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                  const px = facing > 0 ? x + 50 + i * 30 : x - 50 - i * 30
+                  this.effects.push({
+                    type: 'ultPetal',
+                    x: px,
+                    y: y - 100 + Math.random() * 200,
+                    vx: facing * (5 + Math.random() * 5),
+                    vy: (Math.random() - 0.5) * 3,
+                    color: '#ff69b4',
                     life: 60,
-                    charId,
-                    trail: []
-                });
-            }
-
-            update() {
-                for (let i = this.projectiles.length - 1; i >= 0; i--) {
-                    const p = this.projectiles[i];
-                    
-                    p.trail.push({x: p.x, y: p.y});
-                    if (p.trail.length > 8) p.trail.shift();
-                    
-                    p.x += p.vx;
-                    p.life--;
-                    
-                    if (p.life <= 0 || p.x < -100 || p.x > 1380) {
-                        this.projectiles.splice(i, 1);
-                    }
-                }
-            }
-
-            draw(ctx) {
-                for (const p of this.projectiles) {
-                    ctx.save();
-                    
-                    // 绘制轨迹
-                    if (p.trail.length > 1) {
-                        ctx.strokeStyle = p.color;
-                        ctx.lineWidth = p.size * 0.3;
-                        ctx.globalAlpha = 0.4;
-                        ctx.beginPath();
-                        ctx.moveTo(p.trail[0].x, p.trail[0].y);
-                        for (let i = 1; i < p.trail.length; i++) {
-                            ctx.lineTo(p.trail[i].x, p.trail[i].y);
-                        }
-                        ctx.lineTo(p.x, p.y);
-                        ctx.stroke();
-                    }
-                    
-                    ctx.globalAlpha = 1;
-                    ctx.translate(p.x, p.y);
-                    
-                    if (p.type === 'petal') {
-                        // 樱花瓣
-                        ctx.fillStyle = p.color;
-                        ctx.shadowBlur = 20;
-                        ctx.shadowColor = p.color;
-                        for (let i = 0; i < 3; i++) {
-                            ctx.rotate(Math.PI / 3);
-                            ctx.beginPath();
-                            ctx.ellipse(p.size/2, 0, p.size/2, p.size/4, 0, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    } else if (p.type === 'fist') {
-                        // 能量拳
-                        ctx.scale(p.facing, 1);
-                        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
-                        grad.addColorStop(0, '#fff');
-                        grad.addColorStop(0.3, p.color);
-                        grad.addColorStop(1, 'transparent');
-                        ctx.fillStyle = grad;
-                        ctx.shadowBlur = 30;
-                        ctx.shadowColor = p.color;
-                        ctx.beginPath();
-                        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-                        ctx.fill();
-                        // 拳头轮廓
-                        ctx.strokeStyle = '#fff';
-                        ctx.lineWidth = 3;
-                        ctx.beginPath();
-                        ctx.arc(0, 0, p.size * 0.7, 0, Math.PI * 2);
-                        ctx.stroke();
-                    } else if (p.type === 'lightning') {
-                        // 雷电
-                        ctx.strokeStyle = p.color;
-                        ctx.lineWidth = 4;
-                        ctx.shadowBlur = 25;
-                        ctx.shadowColor = p.color;
-                        ctx.beginPath();
-                        ctx.moveTo(-p.size, -p.size/2);
-                        ctx.lineTo(-p.size/3, 0);
-                        ctx.lineTo(-p.size/2, p.size/2);
-                        ctx.lineTo(p.size/3, -p.size/3);
-                        ctx.lineTo(p.size, p.size/2);
-                        ctx.stroke();
-                        // 内核
-                        ctx.strokeStyle = '#fff';
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-                    } else if (p.type === 'leaf') {
-                        // 飞叶
-                        ctx.fillStyle = p.color;
-                        ctx.shadowBlur = 15;
-                        ctx.shadowColor = p.color;
-                        ctx.rotate(p.life * 0.2);
-                        ctx.beginPath();
-                        ctx.ellipse(0, 0, p.size, p.size/3, 0, 0, Math.PI * 2);
-                        ctx.fill();
-                        // 叶脉
-                        ctx.strokeStyle = '#90ee90';
-                        ctx.lineWidth = 2;
-                        ctx.beginPath();
-                        ctx.moveTo(-p.size + 5, 0);
-                        ctx.lineTo(p.size - 5, 0);
-                        ctx.stroke();
-                    } else if (p.type === 'fireball') {
-                        // 火球
-                        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, p.size);
-                        grad.addColorStop(0, '#ffff00');
-                        grad.addColorStop(0.4, '#ff8800');
-                        grad.addColorStop(0.8, p.color);
-                        grad.addColorStop(1, 'transparent');
-                        ctx.fillStyle = grad;
-                        ctx.shadowBlur = 40;
-                        ctx.shadowColor = '#ff4500';
-                        ctx.beginPath();
-                        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
-                        ctx.fill();
-                        // 火焰核心
-                        ctx.fillStyle = '#ffff00';
-                        ctx.beginPath();
-                        ctx.arc(0, 0, p.size * 0.4, 0, Math.PI * 2);
-                        ctx.fill();
-                    }
-                    
-                    ctx.restore();
-                }
-                ctx.shadowBlur = 0;
-            }
-
-            checkHit(projectile, fighter) {
-                const dist = Math.hypot(projectile.x - fighter.x, projectile.y - (fighter.y + fighter.height/2));
-                return dist < projectile.size + fighter.width/2;
-            }
+                    maxLife: 60,
+                  })
+                }, i * 30)
+              }
+            },
+            fu: () => {
+              // 霸王裂地拳 - 巨大拳头砸地
+              this.effects.push({
+                type: 'giantFist',
+                x: x + facing * 150,
+                y: y,
+                facing,
+                color: '#4169e1',
+                life: 80,
+                maxLife: 80,
+                scale: 0,
+              })
+              // 地震波
+              for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                  this.effects.push({
+                    type: 'shockwave',
+                    x: x + facing * 150,
+                    y: y + 90,
+                    color: '#4169e1',
+                    life: 40,
+                    maxLife: 40,
+                    radius: 50 + i * 50,
+                  })
+                }, i * 100)
+              }
+            },
+            jia: () => {
+              // 紫电灭世劫 - 闪电链
+              for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                  const startX = facing > 0 ? x + 50 : x - 50
+                  const endX = facing > 0 ? x + 400 : x - 400
+                  this.effects.push({
+                    type: 'lightningBolt',
+                    x: startX,
+                    y: y,
+                    targetX: endX,
+                    targetY: y - 50 + Math.random() * 100,
+                    color: '#9370db',
+                    life: 20,
+                    maxLife: 20,
+                  })
+                }, i * 80)
+              }
+            },
+            shu: () => {
+              // 万木朝宗阵 - 藤蔓爆发
+              for (let i = 0; i < 16; i++) {
+                const angle = (Math.PI * 2 * i) / 16
+                this.effects.push({
+                  type: 'vine',
+                  x,
+                  y: y + 45,
+                  angle,
+                  color: '#228b22',
+                  life: 90,
+                  maxLife: 90,
+                })
+              }
+            },
+            shen: () => {
+              // 焚天烈焰舞 - 火柱
+              for (let i = 0; i < 7; i++) {
+                setTimeout(() => {
+                  const px = x + facing * (100 + i * 80)
+                  this.effects.push({
+                    type: 'firePillar',
+                    x: px,
+                    y: y + 90,
+                    color: '#ff4500',
+                    life: 80,
+                    maxLife: 80,
+                  })
+                }, i * 60)
+              }
+            },
+          }
+          if (effects[charId]) effects[charId]()
         }
 
-        // ==================== 特效系统 ====================
-        class EffectSystem {
-            constructor() {
-                this.effects = [];
-            }
+        update() {
+          for (let i = this.effects.length - 1; i >= 0; i--) {
+            const e = this.effects[i]
+            e.life--
 
-            addHitSpark(x, y, color) {
-                for (let i = 0; i < 8; i++) {
-                    this.effects.push({
-                        type: 'spark', x, y,
-                        vx: (Math.random() - 0.5) * 15,
-                        vy: (Math.random() - 0.5) * 15,
-                        color, life: 15, maxLife: 15
-                    });
-                }
-            }
+            if (e.vx) e.x += e.vx
+            if (e.vy) e.y += e.vy
+            if (e.type === 'giantFist' && e.scale < 3) e.scale += 0.1
 
-            addUltimate(charId, x, y, facing, isPlayer) {
-                const effects = {
-                    cui: () => {
-                        // 樱花风暴 - 全屏樱花
-                        for (let i = 0; i < 30; i++) {
-                            setTimeout(() => {
-                                const px = facing > 0 ? x + 50 + i * 30 : x - 50 - i * 30;
-                                this.effects.push({
-                                    type: 'ultPetal', x: px, y: y - 100 + Math.random() * 200,
-                                    vx: facing * (5 + Math.random() * 5),
-                                    vy: (Math.random() - 0.5) * 3,
-                                    color: '#ff69b4', life: 60, maxLife: 60
-                                });
-                            }, i * 30);
-                        }
-                    },
-                    fu: () => {
-                        // 霸王裂地拳 - 巨大拳头砸地
-                        this.effects.push({
-                            type: 'giantFist', x: x + facing * 150, y: y,
-                            facing, color: '#4169e1',
-                            life: 80, maxLife: 80, scale: 0
-                        });
-                        // 地震波
-                        for (let i = 0; i < 5; i++) {
-                            setTimeout(() => {
-                                this.effects.push({
-                                    type: 'shockwave', x: x + facing * 150, y: y + 90,
-                                    color: '#4169e1', life: 40, maxLife: 40,
-                                    radius: 50 + i * 50
-                                });
-                            }, i * 100);
-                        }
-                    },
-                    jia: () => {
-                        // 紫电灭世劫 - 闪电链
-                        for (let i = 0; i < 10; i++) {
-                            setTimeout(() => {
-                                const startX = facing > 0 ? x + 50 : x - 50;
-                                const endX = facing > 0 ? x + 400 : x - 400;
-                                this.effects.push({
-                                    type: 'lightningBolt',
-                                    x: startX, y: y,
-                                    targetX: endX, targetY: y - 50 + Math.random() * 100,
-                                    color: '#9370db', life: 20, maxLife: 20
-                                });
-                            }, i * 80);
-                        }
-                    },
-                    shu: () => {
-                        // 万木朝宗阵 - 藤蔓爆发
-                        for (let i = 0; i < 16; i++) {
-                            const angle = (Math.PI * 2 * i) / 16;
-                            this.effects.push({
-                                type: 'vine', x, y: y + 45,
-                                angle, color: '#228b22',
-                                life: 90, maxLife: 90
-                            });
-                        }
-                    },
-                    shen: () => {
-                        // 焚天烈焰舞 - 火柱
-                        for (let i = 0; i < 7; i++) {
-                            setTimeout(() => {
-                                const px = x + facing * (100 + i * 80);
-                                this.effects.push({
-                                    type: 'firePillar', x: px, y: y + 90,
-                                    color: '#ff4500', life: 80, maxLife: 80
-                                });
-                            }, i * 60);
-                        }
-                    }
-                };
-                if (effects[charId]) effects[charId]();
-            }
-
-            update() {
-                for (let i = this.effects.length - 1; i >= 0; i--) {
-                    const e = this.effects[i];
-                    e.life--;
-                    
-                    if (e.vx) e.x += e.vx;
-                    if (e.vy) e.y += e.vy;
-                    if (e.type === 'giantFist' && e.scale < 3) e.scale += 0.1;
-                    
-                    if (e.life <= 0) this.effects.splice(i, 1);
-                }
-            }
-
-            draw(ctx) {
-                for (const e of this.effects) {
-                    const alpha = e.life / e.maxLife;
-                    ctx.save();
-                    
-                    if (e.type === 'spark') {
-                        ctx.strokeStyle = e.color;
-                        ctx.lineWidth = 3;
-                        ctx.globalAlpha = alpha;
-                        ctx.beginPath();
-                        ctx.moveTo(e.x, e.y);
-                        ctx.lineTo(e.x - e.vx * 2, e.y - e.vy * 2);
-                        ctx.stroke();
-                    } else if (e.type === 'ultPetal') {
-                        ctx.fillStyle = e.color;
-                        ctx.globalAlpha = alpha * 0.8;
-                        ctx.translate(e.x, e.y);
-                        ctx.rotate(e.life * 0.1);
-                        ctx.beginPath();
-                        ctx.ellipse(0, 0, 15, 8, 0, 0, Math.PI * 2);
-                        ctx.fill();
-                    } else if (e.type === 'giantFist') {
-                        ctx.translate(e.x, e.y);
-                        ctx.scale(e.facing * e.scale, e.scale);
-                        const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 80);
-                        grad.addColorStop(0, '#fff');
-                        grad.addColorStop(0.3, e.color);
-                        grad.addColorStop(1, 'rgba(65,105,225,0.3)');
-                        ctx.fillStyle = grad;
-                        ctx.shadowBlur = 50;
-                        ctx.shadowColor = e.color;
-                        ctx.beginPath();
-                        ctx.arc(0, 0, 80, 0, Math.PI * 2);
-                        ctx.fill();
-                        // 冲击线
-                        ctx.strokeStyle = '#fff';
-                        ctx.lineWidth = 5;
-                        ctx.beginPath();
-                        ctx.arc(0, 0, 100, 0, Math.PI * 2);
-                        ctx.stroke();
-                    } else if (e.type === 'shockwave') {
-                        ctx.strokeStyle = e.color;
-                        ctx.lineWidth = 5;
-                        ctx.globalAlpha = alpha;
-                        ctx.beginPath();
-                        ctx.ellipse(e.x, e.y, e.radius, e.radius * 0.3, 0, 0, Math.PI * 2);
-                        ctx.stroke();
-                    } else if (e.type === 'lightningBolt') {
-                        ctx.strokeStyle = e.color;
-                        ctx.lineWidth = 4;
-                        ctx.shadowBlur = 30;
-                        ctx.shadowColor = e.color;
-                        ctx.globalAlpha = alpha;
-                        ctx.beginPath();
-                        ctx.moveTo(e.x, e.y);
-                        let cx = e.x;
-                        let cy = e.y;
-                        const steps = 5;
-                        for (let i = 1; i <= steps; i++) {
-                            const t = i / steps;
-                            cx = e.x + (e.targetX - e.x) * t + (Math.random() - 0.5) * 60;
-                            cy = e.y + (e.targetY - e.y) * t + (Math.random() - 0.5) * 60;
-                            ctx.lineTo(cx, cy);
-                        }
-                        ctx.stroke();
-                        // 内核
-                        ctx.strokeStyle = '#fff';
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-                    } else if (e.type === 'vine') {
-                        const progress = 1 - alpha;
-                        const length = progress * 300;
-                        ctx.strokeStyle = e.color;
-                        ctx.lineWidth = 8;
-                        ctx.lineCap = 'round';
-                        ctx.shadowBlur = 20;
-                        ctx.shadowColor = e.color;
-                        ctx.globalAlpha = 0.8 + alpha * 0.2;
-                        ctx.beginPath();
-                        ctx.moveTo(e.x, e.y);
-                        ctx.quadraticCurveTo(
-                            e.x + Math.cos(e.angle) * length * 0.5 + Math.sin(progress * 10) * 20,
-                            e.y + Math.sin(e.angle) * length * 0.5,
-                            e.x + Math.cos(e.angle) * length,
-                            e.y + Math.sin(e.angle) * length
-                        );
-                        ctx.stroke();
-                    } else if (e.type === 'firePillar') {
-                        const height = (1 - alpha) * 400;
-                        const grad = ctx.createLinearGradient(e.x, e.y, e.x, e.y - height);
-                        grad.addColorStop(0, 'rgba(255,69,0,0.8)');
-                        grad.addColorStop(0.5, 'rgba(255,140,0,0.5)');
-                        grad.addColorStop(1, 'transparent');
-                        ctx.fillStyle = grad;
-                        ctx.shadowBlur = 40;
-                        ctx.shadowColor = '#ff4500';
-                        ctx.beginPath();
-                        ctx.moveTo(e.x - 30, e.y);
-                        ctx.lineTo(e.x - 20, e.y - height);
-                        ctx.lineTo(e.x + 20, e.y - height);
-                        ctx.lineTo(e.x + 30, e.y);
-                        ctx.fill();
-                    }
-                    
-                    ctx.restore();
-                }
-                ctx.shadowBlur = 0;
-                ctx.globalAlpha = 1;
-            }
+            if (e.life <= 0) this.effects.splice(i, 1)
+          }
         }
 
-        // ==================== 角色类 ====================
-        class Fighter {
-            constructor(charId, x, y, isPlayer, game) {
-                const char = CHARACTERS[charId];
-                this.charId = charId;
-                this.name = char.name;
-                this.color = char.color;
-                this.avatarType = char.avatarType;
-                this.avatar = char.avatar;
-                this.bodyColor = char.bodyColor;
-                this.outfitColor = char.outfitColor;
-                this.x = x;
-                this.y = y;
-                this.vx = 0;
-                this.vy = 0;
-                this.width = 55;
-                this.height = 100;
-                this.facing = isPlayer ? 1 : -1;
-                this.isPlayer = isPlayer;
-                this.game = game;
+        draw(ctx) {
+          for (const e of this.effects) {
+            const alpha = e.life / e.maxLife
+            ctx.save()
 
-                this.maxHealth = char.maxHealth;
-                this.health = char.maxHealth;
-                this.speed = char.speed;
-                this.energy = 0;
-                this.maxEnergy = 100;
-
-                this.state = 'idle';
-                this.stateTimer = 0;
-                this.onGround = false;
-                this.crouching = false;
-
-                this.hitStun = 0;
-                this.invincible = 0;
-                this.charging = false;
-
-                this.moves = char.moves;
-                this.ult = char.ult;
-                
-                this.combo = 0;
-                this.comboTimer = 0;
-                
-                this.avatarImg = null;
-                if (this.avatarType === 'image') {
-                    this.avatarImg = new Image();
-                    this.avatarImg.src = this.avatar;
-                }
+            if (e.type === 'spark') {
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 3
+              ctx.globalAlpha = alpha
+              ctx.beginPath()
+              ctx.moveTo(e.x, e.y)
+              ctx.lineTo(e.x - e.vx * 2, e.y - e.vy * 2)
+              ctx.stroke()
+            } else if (e.type === 'ultPetal') {
+              ctx.fillStyle = e.color
+              ctx.globalAlpha = alpha * 0.8
+              ctx.translate(e.x, e.y)
+              ctx.rotate(e.life * 0.1)
+              ctx.beginPath()
+              ctx.ellipse(0, 0, 15, 8, 0, 0, Math.PI * 2)
+              ctx.fill()
+            } else if (e.type === 'giantFist') {
+              ctx.translate(e.x, e.y)
+              ctx.scale(e.facing * e.scale, e.scale)
+              const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, 80)
+              grad.addColorStop(0, '#fff')
+              grad.addColorStop(0.3, e.color)
+              grad.addColorStop(1, 'rgba(65,105,225,0.3)')
+              ctx.fillStyle = grad
+              ctx.shadowBlur = 50
+              ctx.shadowColor = e.color
+              ctx.beginPath()
+              ctx.arc(0, 0, 80, 0, Math.PI * 2)
+              ctx.fill()
+              // 冲击线
+              ctx.strokeStyle = '#fff'
+              ctx.lineWidth = 5
+              ctx.beginPath()
+              ctx.arc(0, 0, 100, 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (e.type === 'shockwave') {
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 5
+              ctx.globalAlpha = alpha
+              ctx.beginPath()
+              ctx.ellipse(e.x, e.y, e.radius, e.radius * 0.3, 0, 0, Math.PI * 2)
+              ctx.stroke()
+            } else if (e.type === 'lightningBolt') {
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 4
+              ctx.shadowBlur = 30
+              ctx.shadowColor = e.color
+              ctx.globalAlpha = alpha
+              ctx.beginPath()
+              ctx.moveTo(e.x, e.y)
+              let cx = e.x
+              let cy = e.y
+              const steps = 5
+              for (let i = 1; i <= steps; i++) {
+                const t = i / steps
+                cx = e.x + (e.targetX - e.x) * t + (Math.random() - 0.5) * 60
+                cy = e.y + (e.targetY - e.y) * t + (Math.random() - 0.5) * 60
+                ctx.lineTo(cx, cy)
+              }
+              ctx.stroke()
+              // 内核
+              ctx.strokeStyle = '#fff'
+              ctx.lineWidth = 2
+              ctx.stroke()
+            } else if (e.type === 'vine') {
+              const progress = 1 - alpha
+              const length = progress * 300
+              ctx.strokeStyle = e.color
+              ctx.lineWidth = 8
+              ctx.lineCap = 'round'
+              ctx.shadowBlur = 20
+              ctx.shadowColor = e.color
+              ctx.globalAlpha = 0.8 + alpha * 0.2
+              ctx.beginPath()
+              ctx.moveTo(e.x, e.y)
+              ctx.quadraticCurveTo(
+                e.x +
+                  Math.cos(e.angle) * length * 0.5 +
+                  Math.sin(progress * 10) * 20,
+                e.y + Math.sin(e.angle) * length * 0.5,
+                e.x + Math.cos(e.angle) * length,
+                e.y + Math.sin(e.angle) * length,
+              )
+              ctx.stroke()
+            } else if (e.type === 'firePillar') {
+              const height = (1 - alpha) * 400
+              const grad = ctx.createLinearGradient(e.x, e.y, e.x, e.y - height)
+              grad.addColorStop(0, 'rgba(255,69,0,0.8)')
+              grad.addColorStop(0.5, 'rgba(255,140,0,0.5)')
+              grad.addColorStop(1, 'transparent')
+              ctx.fillStyle = grad
+              ctx.shadowBlur = 40
+              ctx.shadowColor = '#ff4500'
+              ctx.beginPath()
+              ctx.moveTo(e.x - 30, e.y)
+              ctx.lineTo(e.x - 20, e.y - height)
+              ctx.lineTo(e.x + 20, e.y - height)
+              ctx.lineTo(e.x + 30, e.y)
+              ctx.fill()
             }
 
-            update(input, opponent) {
-                this.stateTimer++;
-                if (this.hitStun > 0) this.hitStun--;
-                if (this.invincible > 0) this.invincible--;
+            ctx.restore()
+          }
+          ctx.shadowBlur = 0
+          ctx.globalAlpha = 1
+        }
+      }
 
-                if (this.comboTimer > 0) {
-                    this.comboTimer--;
-                    if (this.comboTimer <= 0) this.combo = 0;
-                }
+      // ==================== 角色类 ====================
+      class Fighter {
+        constructor(charId, x, y, isPlayer, game) {
+          const char = CHARACTERS[charId]
+          this.charId = charId
+          this.name = char.name
+          this.color = char.color
+          this.avatarType = char.avatarType
+          this.avatar = char.avatar
+          this.bodyColor = char.bodyColor
+          this.outfitColor = char.outfitColor
+          this.x = x
+          this.y = y
+          this.vx = 0
+          this.vy = 0
+          this.width = 55
+          this.height = 100
+          this.facing = isPlayer ? 1 : -1
+          this.isPlayer = isPlayer
+          this.game = game
 
-                if (!this.onGround) {
-                    this.vy += 0.6;
-                }
+          this.maxHealth = char.maxHealth
+          this.health = char.maxHealth
+          this.speed = char.speed
+          this.energy = 0
+          this.maxEnergy = 100
 
-                if (this.hitStun > 0) {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    this.applyGroundConstraint();
-                    return;
-                }
+          this.state = 'idle'
+          this.stateTimer = 0
+          this.onGround = false
+          this.crouching = false
 
-                if (['punch', 'kick', 'ult'].includes(this.state)) {
-                    this.vx *= 0.9;
-                    if (this.stateTimer >= this.getStateDuration()) {
-                        this.state = this.onGround ? 'idle' : 'jump';
-                    }
-                    this.applyPhysics();
-                    return;
-                }
+          this.hitStun = 0
+          this.invincible = 0
+          this.charging = false
 
-                if (this.isPlayer) {
-                    this.handlePlayerInput(input);
-                } else {
-                    this.handleAI(opponent);
-                }
+          this.moves = char.moves
+          this.ult = char.ult
 
-                this.applyPhysics();
-            }
+          this.combo = 0
+          this.comboTimer = 0
 
-            handlePlayerInput(input) {
-                if (input.isDown('KeyD') || this.charging) {
-                    this.charging = input.isDown('KeyD');
-                    if (this.charging && this.onGround) {
-                        this.state = 'idle';
-                        this.vx *= 0.8;
-                        if (this.energy < this.maxEnergy) {
-                            this.energy += 0.5;
-                        }
-                        return;
-                    }
-                }
-
-                let moveLeft = input.isDown('ArrowLeft') || input.isDown('KeyA');
-                let moveRight = input.isDown('ArrowRight') || input.isDown('KeyD');
-                let moveUp = input.isDown('ArrowUp') || input.isDown('KeyW');
-                let moveDown = input.isDown('ArrowDown') || input.isDown('KeyS');
-
-                this.crouching = moveDown && this.onGround;
-
-                if (moveLeft && !this.crouching) {
-                    this.vx = -this.speed;
-                    this.facing = -1;
-                    if (this.onGround) this.state = 'run';
-                } else if (moveRight && !this.crouching) {
-                    this.vx = this.speed;
-                    this.facing = 1;
-                    if (this.onGround) this.state = 'run';
-                } else {
-                    this.vx *= 0.8;
-                    if (this.onGround && this.state === 'run') this.state = 'idle';
-                }
-
-                if ((input.isPressed('ArrowUp') || input.isPressed('KeyW')) && this.onGround) {
-                    this.vy = -14;
-                    this.onGround = false;
-                    this.state = 'jump';
-                }
-
-                if (input.isPressed('KeyJ') || input.isPressed('KeyZ')) {
-                    this.performAttack('punch', moveDown, moveUp, !this.onGround);
-                }
-
-                if (input.isPressed('KeyK') || input.isPressed('KeyX')) {
-                    this.performAttack('kick', moveDown, moveUp, !this.onGround);
-                }
-
-                if ((input.isPressed('KeyL') || input.isPressed('KeyC') || input.isPressed('KeyF')) && this.energy >= 50) {
-                    this.performUlt();
-                }
-            }
-
-            handleAI(opponent) {
-                const dist = opponent.x - this.x;
-                const absDist = Math.abs(dist);
-                this.facing = dist > 0 ? 1 : -1;
-
-                if (this.hitStun > 0) return;
-
-                if (this.energy >= 50 && Math.random() < 0.02) {
-                    this.performUlt();
-                    return;
-                }
-
-                if (absDist > 100) {
-                    this.vx = this.facing * this.speed * 0.8;
-                    if (this.onGround) this.state = 'run';
-                } else if (absDist < 80) {
-                    this.vx *= 0.5;
-                    if (Math.random() < 0.05) {
-                        const attacks = ['punch', 'punch', 'kick'];
-                        const attack = attacks[Math.floor(Math.random() * attacks.length)];
-                        const down = Math.random() < 0.3;
-                        const up = !down && Math.random() < 0.3;
-                        const air = !this.onGround;
-                        this.performAttack(attack, down, up, air);
-                    } else if (this.energy < 30 && Math.random() < 0.03) {
-                        this.charging = true;
-                        this.energy += 1;
-                    } else {
-                        this.charging = false;
-                    }
-                }
-
-                if (this.onGround && Math.random() < 0.01) {
-                    this.vy = -14;
-                    this.onGround = false;
-                    this.state = 'jump';
-                }
-
-                if (this.x < 100) this.vx = Math.max(this.vx, 2);
-                if (this.x > this.game.width - 100) this.vx = Math.min(this.vx, -2);
-            }
-
-            performAttack(type, down, up, air) {
-                this.state = type;
-                this.stateTimer = 0;
-                this.charging = false;
-
-                let moveData;
-                if (air) {
-                    moveData = this.moves.airKick;
-                } else if (down) {
-                    moveData = this.moves.downPunch;
-                } else if (up) {
-                    moveData = this.moves.upPunch;
-                } else {
-                    moveData = this.moves[type];
-                }
-
-                this.currentMove = moveData;
-                
-                // 只有玩家显示技能名称
-                if (this.isPlayer) {
-                    this.game.showMoveName(moveData.name, moveData.color);
-                }
-
-                // 普通拳/腿 发射广播
-                if (!air && !down && !up) {
-                    const px = this.x + this.facing * 40;
-                    const py = this.y + this.height * 0.4;
-                    this.game.projectiles.add(type, px, py, this.facing, this.charId);
-                }
-
-                // 特效
-                const hitX = this.x + this.facing * 60;
-                const hitY = this.y + this.height * 0.5;
-                this.game.effects.addHitSpark(hitX, hitY, moveData.color);
-            }
-
-            performUlt() {
-                this.state = 'ult';
-                this.stateTimer = 0;
-                this.energy -= 50;
-                this.charging = false;
-                
-                // 只有玩家显示大招名称
-                if (this.isPlayer) {
-                    this.game.showMoveName(this.ult.name, this.ult.color);
-                }
-                
-                this.game.effects.addUltimate(this.charId, this.x, this.y, this.facing, this.isPlayer);
-                this.game.screenShake = 25;
-            }
-
-            getStateDuration() {
-                if (this.state === 'punch') return 20;
-                if (this.state === 'kick') return 25;
-                if (this.state === 'ult') return 80;
-                return 10;
-            }
-
-            checkProjectileHit(projectile) {
-                if (projectile.facing === this.facing) return false;
-                const dist = Math.hypot(projectile.x - this.x, projectile.y - (this.y + this.height/2));
-                return dist < projectile.size + this.width/2;
-            }
-
-            takeDamage(damage, knockbackX, knockbackY) {
-                if (this.invincible > 0) return;
-                
-                this.health -= damage;
-                this.hitStun = 15;
-                this.invincible = 30;
-                this.vx = knockbackX * 2;
-                if (knockbackY) this.vy = knockbackY;
-
-                this.game.particles.emitRect(this.x, this.y + this.height * 0.5, '#ff0000', 15, 10, 8, 20);
-
-                if (this.health <= 0) {
-                    this.health = 0;
-                }
-            }
-
-            applyPhysics() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.applyGroundConstraint();
-            }
-
-            applyGroundConstraint() {
-                const groundY = this.game.height - 50;
-                if (this.y + this.height > groundY) {
-                    this.y = groundY - this.height;
-                    this.vy = 0;
-                    if (!this.onGround) {
-                        this.onGround = true;
-                        if (['jump', 'airKick'].includes(this.state)) {
-                            this.state = 'idle';
-                        }
-                    }
-                }
-                this.x = Math.max(50, Math.min(this.game.width - 50, this.x));
-            }
-
-            draw(ctx) {
-                ctx.save();
-
-                if (this.invincible > 0 && Math.floor(this.invincible / 3) % 2 === 0) {
-                    ctx.globalAlpha = 0.5;
-                }
-
-                if (this.charging) {
-                    ctx.save();
-                    ctx.strokeStyle = '#ffcc00';
-                    ctx.lineWidth = 3;
-                    ctx.setLineDash([5, 5]);
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y + this.height * 0.5, 45 + Math.sin(this.stateTimer * 0.3) * 5, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.restore();
-                }
-
-                ctx.translate(this.x, this.y + this.height);
-                
-                const scaleY = this.crouching ? 0.75 : 1;
-                ctx.scale(1, scaleY);
-
-                this.drawDetailedCharacter(ctx);
-
-                ctx.restore();
-            }
-
-            drawDetailedCharacter(ctx) {
-                const walkCycle = this.state === 'run' ? Math.sin(this.stateTimer * 0.4) : 0;
-                const isAttacking = ['punch', 'kick'].includes(this.state);
-                const attackFrame = isAttacking ? this.stateTimer / this.getStateDuration() : 0;
-                
-                // 身体发光效果
-                if (isAttacking) {
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = this.color;
-                }
-
-                // 绘制腿部
-                ctx.strokeStyle = '#333';
-                ctx.lineWidth = 12;
-                ctx.lineCap = 'round';
-                
-                // 左腿
-                const leftLegX = -15 + walkCycle * 10;
-                ctx.beginPath();
-                ctx.moveTo(-10, -40);
-                ctx.lineTo(leftLegX, -20);
-                ctx.lineTo(leftLegX - 5, 0);
-                ctx.stroke();
-                
-                // 右腿
-                const rightLegX = 15 - walkCycle * 10;
-                ctx.beginPath();
-                ctx.moveTo(10, -40);
-                ctx.lineTo(rightLegX, -20);
-                ctx.lineTo(rightLegX + 5, 0);
-                ctx.stroke();
-
-                // 鞋子
-                ctx.fillStyle = '#222';
-                ctx.fillRect(leftLegX - 12, -5, 15, 8);
-                ctx.fillRect(rightLegX - 3, -5, 15, 8);
-
-                // 身体/衣服
-                const outfitGrad = ctx.createLinearGradient(0, -70, 0, -30);
-                outfitGrad.addColorStop(0, this.outfitColor);
-                outfitGrad.addColorStop(1, this.darkenColor(this.outfitColor, 30));
-                ctx.fillStyle = outfitGrad;
-                
-                // 身体形状
-                ctx.beginPath();
-                ctx.roundRect(-22, -70, 44, 45, 8);
-                ctx.fill();
-                
-                // 衣服细节
-                ctx.strokeStyle = this.darkenColor(this.outfitColor, 50);
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(0, -70);
-                ctx.lineTo(0, -25);
-                ctx.stroke();
-                
-                // 腰带
-                ctx.fillStyle = '#444';
-                ctx.fillRect(-22, -30, 44, 8);
-
-                // 手臂
-                ctx.lineWidth = 10;
-                const armExtend = isAttacking ? attackFrame * 40 : 0;
-                
-                // 左臂（后）
-                ctx.strokeStyle = this.bodyColor;
-                ctx.beginPath();
-                ctx.moveTo(-18, -60);
-                ctx.lineTo(-30 - armExtend * 0.3, -40);
-                ctx.stroke();
-                
-                // 右臂（前，攻击用）
-                ctx.beginPath();
-                ctx.moveTo(18, -60);
-                ctx.lineTo(30 + armExtend, -45 + (isAttacking ? -10 : 0));
-                ctx.stroke();
-                
-                // 拳头
-                ctx.fillStyle = this.bodyColor;
-                const fistX = 30 + armExtend;
-                const fistY = -45 + (isAttacking ? -10 : 0);
-                ctx.beginPath();
-                ctx.arc(this.facing > 0 ? fistX : -fistX, fistY, 10, 0, Math.PI * 2);
-                ctx.fill();
-
-                // 头部
-                ctx.shadowBlur = 0;
-                const headY = -82;
-                
-                // 脖子
-                ctx.fillStyle = this.bodyColor;
-                ctx.fillRect(-8, -75, 16, 10);
-                
-                // 头型
-                ctx.beginPath();
-                ctx.arc(0, headY, 22, 0, Math.PI * 2);
-                ctx.fill();
-
-                // 绘制头像
-                if (this.avatarType === 'image' && this.avatarImg && this.avatarImg.complete) {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(0, headY, 20, 0, Math.PI * 2);
-                    ctx.clip();
-                    ctx.scale(this.facing, 1);
-                    ctx.drawImage(this.avatarImg, -20, headY - 20, 40, 40);
-                    ctx.restore();
-                    
-                    // 头像边框
-                    ctx.strokeStyle = this.color;
-                    ctx.lineWidth = 3;
-                    ctx.beginPath();
-                    ctx.arc(0, headY, 22, 0, Math.PI * 2);
-                    ctx.stroke();
-                } else {
-                    // emoji头像
-                    ctx.save();
-                    ctx.scale(this.facing, 1);
-                    ctx.font = '32px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(this.avatar, 0, headY);
-                    ctx.restore();
-                    
-                    // 头像光晕
-                    ctx.strokeStyle = this.color;
-                    ctx.lineWidth = 3;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = this.color;
-                    ctx.beginPath();
-                    ctx.arc(0, headY, 24, 0, Math.PI * 2);
-                    ctx.stroke();
-                }
-
-                // 攻击特效光环
-                if (isAttacking && attackFrame < 0.5) {
-                    ctx.strokeStyle = this.currentMove ? this.currentMove.color : '#fff';
-                    ctx.lineWidth = 3;
-                    ctx.globalAlpha = 1 - attackFrame * 2;
-                    ctx.beginPath();
-                    ctx.arc(fistX + 10, fistY, 20 + attackFrame * 40, 0, Math.PI * 2);
-                    ctx.stroke();
-                    ctx.globalAlpha = 1;
-                }
-
-                ctx.shadowBlur = 0;
-            }
-
-            darkenColor(color, percent) {
-                const num = parseInt(color.replace('#', ''), 16);
-                const amt = Math.round(2.55 * percent);
-                const R = Math.max((num >> 16) - amt, 0);
-                const G = Math.max((num >> 8 & 0x00FF) - amt, 0);
-                const B = Math.max((num & 0x0000FF) - amt, 0);
-                return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
-            }
+          this.avatarImg = null
+          if (this.avatarType === 'image') {
+            this.avatarImg = new Image()
+            this.avatarImg.src = this.avatar
+          }
         }
 
-        // ==================== 游戏主类 ====================
-        class Game {
-            constructor() {
-                this.canvas = document.getElementById('gameCanvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.width = 1280;
-                this.height = 720;
-                this.canvas.width = this.width;
-                this.canvas.height = this.height;
+        update(input, opponent) {
+          this.stateTimer++
+          if (this.hitStun > 0) this.hitStun--
+          if (this.invincible > 0) this.invincible--
 
-                this.input = new InputHandler();
-                this.particles = new ParticleSystem();
-                this.effects = new EffectSystem();
-                this.projectiles = new ProjectileSystem();
+          if (this.comboTimer > 0) {
+            this.comboTimer--
+            if (this.comboTimer <= 0) this.combo = 0
+          }
 
-                this.playerChar = null;
-                this.cpuChar = null;
-                this.player = null;
-                this.cpu = null;
+          if (!this.onGround) {
+            this.vy += 0.6
+          }
 
-                this.gameState = 'select';
-                this.timer = 60;
-                this.timerInterval = null;
-                this.screenShake = 0;
+          if (this.hitStun > 0) {
+            this.x += this.vx
+            this.y += this.vy
+            this.vx *= 0.92 // 击飞时水平速度衰减
+            this.applyGroundConstraint()
+            return
+          }
 
-                this.setupUI();
-                this.loop();
+          if (['punch', 'kick', 'ult'].includes(this.state)) {
+            this.vx *= 0.9
+            if (this.stateTimer >= this.getStateDuration()) {
+              this.state = this.onGround ? 'idle' : 'jump'
+            }
+            this.applyPhysics()
+            return
+          }
+
+          if (this.isPlayer) {
+            this.handlePlayerInput(input)
+          } else {
+            this.handleAI(opponent)
+          }
+
+          this.applyPhysics()
+        }
+
+        handlePlayerInput(input) {
+          if (input.isDown('KeyD') || this.charging) {
+            this.charging = input.isDown('KeyD')
+            if (this.charging && this.onGround) {
+              this.state = 'idle'
+              this.vx *= 0.8
+              if (this.energy < this.maxEnergy) {
+                this.energy += 0.5
+              }
+              return
+            }
+          }
+
+          let moveLeft = input.isDown('ArrowLeft') || input.isDown('KeyA')
+          let moveRight = input.isDown('ArrowRight') || input.isDown('KeyD')
+          let moveUp = input.isDown('ArrowUp') || input.isDown('KeyW')
+          let moveDown = input.isDown('ArrowDown') || input.isDown('KeyS')
+
+          this.crouching = moveDown && this.onGround
+
+          if (moveLeft && !this.crouching) {
+            this.vx = -this.speed
+            this.facing = -1
+            if (this.onGround) this.state = 'run'
+          } else if (moveRight && !this.crouching) {
+            this.vx = this.speed
+            this.facing = 1
+            if (this.onGround) this.state = 'run'
+          } else {
+            this.vx *= 0.8
+            if (this.onGround && this.state === 'run') this.state = 'idle'
+          }
+
+          if (
+            (input.isPressed('ArrowUp') || input.isPressed('KeyW')) &&
+            this.onGround
+          ) {
+            this.vy = -14
+            this.onGround = false
+            this.state = 'jump'
+          }
+
+          if (input.isPressed('KeyJ') || input.isPressed('KeyZ')) {
+            this.performAttack('punch', moveDown, moveUp, !this.onGround)
+          }
+
+          if (input.isPressed('KeyK') || input.isPressed('KeyX')) {
+            this.performAttack('kick', moveDown, moveUp, !this.onGround)
+          }
+
+          if (
+            (input.isPressed('KeyL') ||
+              input.isPressed('KeyC') ||
+              input.isPressed('KeyF')) &&
+            this.energy >= 50
+          ) {
+            this.performUlt()
+          }
+        }
+
+        handleAI(opponent) {
+          const dist = opponent.x - this.x
+          const absDist = Math.abs(dist)
+          this.facing = dist > 0 ? 1 : -1
+
+          if (this.hitStun > 0) return
+
+          if (this.energy >= 50 && Math.random() < 0.02) {
+            this.performUlt()
+            return
+          }
+
+          if (absDist > 100) {
+            this.vx = this.facing * this.speed * 0.8
+            if (this.onGround) this.state = 'run'
+          } else if (absDist < 80) {
+            this.vx *= 0.5
+            if (Math.random() < 0.05) {
+              const attacks = ['punch', 'punch', 'kick']
+              const attack = attacks[Math.floor(Math.random() * attacks.length)]
+              const down = Math.random() < 0.3
+              const up = !down && Math.random() < 0.3
+              const air = !this.onGround
+              this.performAttack(attack, down, up, air)
+            } else if (this.energy < 30 && Math.random() < 0.03) {
+              this.charging = true
+              this.energy += 1
+            } else {
+              this.charging = false
+            }
+          }
+
+          if (this.onGround && Math.random() < 0.01) {
+            this.vy = -14
+            this.onGround = false
+            this.state = 'jump'
+          }
+
+          if (this.x < 100) this.vx = Math.max(this.vx, 2)
+          if (this.x > this.game.width - 100) this.vx = Math.min(this.vx, -2)
+        }
+
+        performAttack(type, down, up, air) {
+          this.state = type
+          this.stateTimer = 0
+          this.charging = false
+
+          let moveData
+          if (air) {
+            moveData = this.moves.airKick
+          } else if (down) {
+            moveData = this.moves.downPunch
+          } else if (up) {
+            moveData = this.moves.upPunch
+          } else {
+            moveData = this.moves[type]
+          }
+
+          this.currentMove = moveData
+
+          // 只有玩家显示技能名称
+          if (this.isPlayer) {
+            this.game.showMoveName(moveData.name, moveData.color)
+          }
+
+          // 普通拳/腿 发射广播
+          if (!air && !down && !up) {
+            const px = this.x + this.facing * 40
+            const py = this.y + this.height * 0.4
+            this.game.projectiles.add(type, px, py, this.facing, this.charId)
+          }
+
+          // 特效
+          const hitX = this.x + this.facing * 60
+          const hitY = this.y + this.height * 0.5
+          this.game.effects.addHitSpark(hitX, hitY, moveData.color)
+        }
+
+        performUlt() {
+          this.state = 'ult'
+          this.stateTimer = 0
+          this.energy -= 50
+          this.charging = false
+
+          // 只有玩家显示大招名称
+          if (this.isPlayer) {
+            this.game.showMoveName(this.ult.name, this.ult.color)
+          }
+
+          this.game.effects.addUltimate(
+            this.charId,
+            this.x,
+            this.y,
+            this.facing,
+            this.isPlayer,
+          )
+          this.game.screenShake = 25
+        }
+
+        getStateDuration() {
+          if (this.state === 'punch') return 20
+          if (this.state === 'kick') return 25
+          if (this.state === 'ult') return 80
+          return 10
+        }
+
+        checkProjectileHit(projectile) {
+          if (projectile.facing === this.facing) return false
+          const dist = Math.hypot(
+            projectile.x - this.x,
+            projectile.y - (this.y + this.height / 2),
+          )
+          return dist < projectile.size + this.width / 2
+        }
+
+        takeDamage(damage, knockbackX, knockbackY) {
+          if (this.invincible > 0) return
+
+          this.health -= damage
+          this.hitStun = 18
+          this.invincible = 35
+          this.vx = knockbackX * 2
+          if (knockbackY) {
+            this.vy = knockbackY
+          }
+          // 确保被击飞时能受到重力影响
+          this.onGround = false
+
+          this.game.particles.emitRect(
+            this.x,
+            this.y + this.height * 0.5,
+            '#ff0000',
+            15,
+            10,
+            8,
+            20,
+          )
+
+          if (this.health <= 0) {
+            this.health = 0
+          }
+        }
+
+        applyPhysics() {
+          this.x += this.vx
+          this.y += this.vy
+          this.applyGroundConstraint()
+        }
+
+        applyGroundConstraint() {
+          const groundY = this.game.height - 50
+          if (this.y + this.height >= groundY) {
+            this.y = groundY - this.height
+            this.vy = 0
+            this.onGround = true
+            if (['jump', 'airKick'].includes(this.state)) {
+              this.state = 'idle'
+            }
+          } else {
+            // 在空中时明确设置 onGround 为 false
+            this.onGround = false
+          }
+          
+          // 防止飞出屏幕顶部太远
+          if (this.y < -400) {
+            this.y = -400
+            this.vy = 0
+          }
+          
+          this.x = Math.max(50, Math.min(this.game.width - 50, this.x))
+        }
+
+        draw(ctx) {
+          ctx.save()
+
+          if (
+            this.invincible > 0 &&
+            Math.floor(this.invincible / 3) % 2 === 0
+          ) {
+            ctx.globalAlpha = 0.5
+          }
+
+          if (this.charging) {
+            ctx.save()
+            ctx.strokeStyle = '#ffcc00'
+            ctx.lineWidth = 3
+            ctx.setLineDash([5, 5])
+            ctx.beginPath()
+            ctx.arc(
+              this.x,
+              this.y + this.height * 0.5,
+              45 + Math.sin(this.stateTimer * 0.3) * 5,
+              0,
+              Math.PI * 2,
+            )
+            ctx.stroke()
+            ctx.restore()
+          }
+
+          ctx.translate(this.x, this.y + this.height)
+
+          const scaleY = this.crouching ? 0.75 : 1
+          ctx.scale(1, scaleY)
+
+          this.drawDetailedCharacter(ctx)
+
+          ctx.restore()
+        }
+
+        drawDetailedCharacter(ctx) {
+          const walkCycle =
+            this.state === 'run' ? Math.sin(this.stateTimer * 0.4) : 0
+          const isAttacking = ['punch', 'kick'].includes(this.state)
+          const attackFrame = isAttacking
+            ? this.stateTimer / this.getStateDuration()
+            : 0
+
+          // 身体发光效果
+          if (isAttacking) {
+            ctx.shadowBlur = 20
+            ctx.shadowColor = this.color
+          }
+
+          // 绘制腿部
+          ctx.strokeStyle = '#333'
+          ctx.lineWidth = 12
+          ctx.lineCap = 'round'
+
+          // 左腿
+          const leftLegX = -15 + walkCycle * 10
+          ctx.beginPath()
+          ctx.moveTo(-10, -40)
+          ctx.lineTo(leftLegX, -20)
+          ctx.lineTo(leftLegX - 5, 0)
+          ctx.stroke()
+
+          // 右腿
+          const rightLegX = 15 - walkCycle * 10
+          ctx.beginPath()
+          ctx.moveTo(10, -40)
+          ctx.lineTo(rightLegX, -20)
+          ctx.lineTo(rightLegX + 5, 0)
+          ctx.stroke()
+
+          // 鞋子
+          ctx.fillStyle = '#222'
+          ctx.fillRect(leftLegX - 12, -5, 15, 8)
+          ctx.fillRect(rightLegX - 3, -5, 15, 8)
+
+          // 身体/衣服
+          const outfitGrad = ctx.createLinearGradient(0, -70, 0, -30)
+          outfitGrad.addColorStop(0, this.outfitColor)
+          outfitGrad.addColorStop(1, this.darkenColor(this.outfitColor, 30))
+          ctx.fillStyle = outfitGrad
+
+          // 身体形状
+          ctx.beginPath()
+          ctx.roundRect(-22, -70, 44, 45, 8)
+          ctx.fill()
+
+          // 衣服细节
+          ctx.strokeStyle = this.darkenColor(this.outfitColor, 50)
+          ctx.lineWidth = 2
+          ctx.beginPath()
+          ctx.moveTo(0, -70)
+          ctx.lineTo(0, -25)
+          ctx.stroke()
+
+          // 腰带
+          ctx.fillStyle = '#444'
+          ctx.fillRect(-22, -30, 44, 8)
+
+          // 手臂
+          ctx.lineWidth = 10
+          const armExtend = isAttacking ? attackFrame * 40 : 0
+
+          // 左臂（后）
+          ctx.strokeStyle = this.bodyColor
+          ctx.beginPath()
+          ctx.moveTo(-18, -60)
+          ctx.lineTo(-30 - armExtend * 0.3, -40)
+          ctx.stroke()
+
+          // 右臂（前，攻击用）
+          ctx.beginPath()
+          ctx.moveTo(18, -60)
+          ctx.lineTo(30 + armExtend, -45 + (isAttacking ? -10 : 0))
+          ctx.stroke()
+
+          // 拳头
+          ctx.fillStyle = this.bodyColor
+          const fistX = 30 + armExtend
+          const fistY = -45 + (isAttacking ? -10 : 0)
+          ctx.beginPath()
+          ctx.arc(this.facing > 0 ? fistX : -fistX, fistY, 10, 0, Math.PI * 2)
+          ctx.fill()
+
+          // 头部
+          ctx.shadowBlur = 0
+          const headY = -82
+
+          // 脖子
+          ctx.fillStyle = this.bodyColor
+          ctx.fillRect(-8, -75, 16, 10)
+
+          // 头型
+          ctx.beginPath()
+          ctx.arc(0, headY, 22, 0, Math.PI * 2)
+          ctx.fill()
+
+          // 绘制头像
+          if (
+            this.avatarType === 'image' &&
+            this.avatarImg &&
+            this.avatarImg.complete
+          ) {
+            ctx.save()
+            ctx.beginPath()
+            ctx.arc(0, headY, 20, 0, Math.PI * 2)
+            ctx.clip()
+            ctx.scale(this.facing, 1)
+            ctx.drawImage(this.avatarImg, -20, headY - 20, 40, 40)
+            ctx.restore()
+
+            // 头像边框
+            ctx.strokeStyle = this.color
+            ctx.lineWidth = 3
+            ctx.beginPath()
+            ctx.arc(0, headY, 22, 0, Math.PI * 2)
+            ctx.stroke()
+          } else {
+            // emoji头像
+            ctx.save()
+            ctx.scale(this.facing, 1)
+            ctx.font = '32px Arial'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText(this.avatar, 0, headY)
+            ctx.restore()
+
+            // 头像光晕
+            ctx.strokeStyle = this.color
+            ctx.lineWidth = 3
+            ctx.shadowBlur = 15
+            ctx.shadowColor = this.color
+            ctx.beginPath()
+            ctx.arc(0, headY, 24, 0, Math.PI * 2)
+            ctx.stroke()
+          }
+
+          // 攻击特效光环
+          if (isAttacking && attackFrame < 0.5) {
+            ctx.strokeStyle = this.currentMove ? this.currentMove.color : '#fff'
+            ctx.lineWidth = 3
+            ctx.globalAlpha = 1 - attackFrame * 2
+            ctx.beginPath()
+            ctx.arc(fistX + 10, fistY, 20 + attackFrame * 40, 0, Math.PI * 2)
+            ctx.stroke()
+            ctx.globalAlpha = 1
+          }
+
+          ctx.shadowBlur = 0
+        }
+
+        darkenColor(color, percent) {
+          const num = parseInt(color.replace('#', ''), 16)
+          const amt = Math.round(2.55 * percent)
+          const R = Math.max((num >> 16) - amt, 0)
+          const G = Math.max(((num >> 8) & 0x00ff) - amt, 0)
+          const B = Math.max((num & 0x0000ff) - amt, 0)
+          return (
+            '#' +
+            (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1)
+          )
+        }
+      }
+
+      // ==================== 游戏主类 ====================
+      class Game {
+        constructor() {
+          this.canvas = document.getElementById('gameCanvas')
+          this.ctx = this.canvas.getContext('2d')
+          this.width = 1280
+          this.height = 720
+          this.canvas.width = this.width
+          this.canvas.height = this.height
+
+          this.input = new InputHandler()
+          this.particles = new ParticleSystem()
+          this.effects = new EffectSystem()
+          this.projectiles = new ProjectileSystem()
+
+          this.playerChar = null
+          this.cpuChar = null
+          this.player = null
+          this.cpu = null
+
+          this.gameState = 'select'
+          this.timer = 60
+          this.timerInterval = null
+          this.screenShake = 0
+
+          this.setupUI()
+          this.loop()
+        }
+
+        setupUI() {
+          const grid = document.getElementById('charGrid')
+          const hint = document.getElementById('selectHint')
+          const startBtn = document.getElementById('startBtn')
+
+          Object.values(CHARACTERS).forEach((char) => {
+            const card = document.createElement('div')
+            card.className = 'char-card'
+
+            let avatarHtml
+            if (char.avatarType === 'image') {
+              avatarHtml = `<img src="${char.avatar}" style="width:100%;height:100%;object-fit:cover">`
+            } else {
+              avatarHtml = char.avatar
             }
 
-            setupUI() {
-                const grid = document.getElementById('charGrid');
-                const hint = document.getElementById('selectHint');
-                const startBtn = document.getElementById('startBtn');
-
-                Object.values(CHARACTERS).forEach(char => {
-                    const card = document.createElement('div');
-                    card.className = 'char-card';
-                    
-                    let avatarHtml;
-                    if (char.avatarType === 'image') {
-                        avatarHtml = `<img src="${char.avatar}" style="width:100%;height:100%;object-fit:cover">`;
-                    } else {
-                        avatarHtml = char.avatar;
-                    }
-                    
-                    card.innerHTML = `
+            card.innerHTML = `
                         <div class="char-avatar" style="background: ${char.color}40; border: 3px solid ${char.color}">${avatarHtml}</div>
                         <div class="char-name">${char.name}</div>
-                    `;
-                    card.addEventListener('click', () => {
-                        if (!this.playerChar) {
-                            this.playerChar = char.id;
-                            card.classList.add('selected');
-                            hint.textContent = '请选择对手';
-                        } else if (!this.cpuChar && char.id !== this.playerChar) {
-                            this.cpuChar = char.id;
-                            card.classList.add('selected');
-                            hint.textContent = `${CHARACTERS[this.playerChar].name} VS ${char.name}`;
-                            startBtn.disabled = false;
-                        }
-                    });
-                    grid.appendChild(card);
-                });
+                    `
+            card.addEventListener('click', () => {
+              if (!this.playerChar) {
+                this.playerChar = char.id
+                card.classList.add('selected')
+                hint.textContent = '请选择对手'
+              } else if (!this.cpuChar && char.id !== this.playerChar) {
+                this.cpuChar = char.id
+                card.classList.add('selected')
+                hint.textContent = `${CHARACTERS[this.playerChar].name} VS ${char.name}`
+                startBtn.disabled = false
+              }
+            })
+            grid.appendChild(card)
+          })
 
-                startBtn.addEventListener('click', () => {
-                    document.getElementById('charSelect').classList.add('hidden');
-                    this.startGame();
-                });
+          startBtn.addEventListener('click', () => {
+            document.getElementById('charSelect').classList.add('hidden')
+            this.startGame()
+          })
 
-                document.getElementById('restartBtn').addEventListener('click', () => {
-                    location.reload();
-                });
+          document
+            .getElementById('restartBtn')
+            .addEventListener('click', () => {
+              location.reload()
+            })
 
-                this.setupMobileControls();
-            }
-
-            setupMobileControls() {
-                const buttons = [
-                    ['btnUp', 'ArrowUp'],
-                    ['btnDown', 'ArrowDown'],
-                    ['btnLeft', 'ArrowLeft'],
-                    ['btnRight', 'ArrowRight'],
-                    ['btnPunch', 'KeyJ'],
-                    ['btnKick', 'KeyK'],
-                    ['btnCharge', 'KeyD'],
-                    ['btnUlt', 'KeyL']
-                ];
-
-                buttons.forEach(([id, code]) => {
-                    const btn = document.getElementById(id);
-                    if (!btn) return;
-
-                    let touchId = null;
-
-                    const onTouchStart = (e) => {
-                        e.preventDefault();
-                        if (touchId === null) {
-                            touchId = e.changedTouches[0].identifier;
-                            this.input.keys[code] = true;
-                            if (code !== 'KeyD') this.input.keysPressed[code] = true;
-                            btn.classList.add('pressed');
-                        }
-                    };
-
-                    const onTouchEnd = (e) => {
-                        e.preventDefault();
-                        for (let i = 0; i < e.changedTouches.length; i++) {
-                            if (e.changedTouches[i].identifier === touchId) {
-                                touchId = null;
-                                this.input.keys[code] = false;
-                                this.input.keysPressed[code] = false;
-                                btn.classList.remove('pressed');
-                                break;
-                            }
-                        }
-                    };
-
-                    btn.addEventListener('touchstart', onTouchStart, { passive: false });
-                    btn.addEventListener('touchend', onTouchEnd, { passive: false });
-                    btn.addEventListener('touchcancel', onTouchEnd, { passive: false });
-                });
-            }
-
-            startGame() {
-                this.gameState = 'playing';
-                this.player = new Fighter(this.playerChar, 300, 400, true, this);
-                this.cpu = new Fighter(this.cpuChar, this.width - 300, 400, false, this);
-
-                document.getElementById('p1Name').textContent = this.player.name;
-                document.getElementById('p2Name').textContent = this.cpu.name;
-
-                this.timerInterval = setInterval(() => {
-                    if (this.gameState === 'playing') {
-                        this.timer--;
-                        document.getElementById('timer').textContent = this.timer;
-                        if (this.timer <= 0) {
-                            this.endGame();
-                        }
-                    }
-                }, 1000);
-            }
-
-            showMoveName(name, color) {
-                // 只显示玩家技能名称，在屏幕左侧
-                const el = document.createElement('div');
-                el.className = 'move-name';
-                el.textContent = name;
-                el.style.color = color;
-                document.getElementById('ui').appendChild(el);
-                setTimeout(() => el.remove(), 1200);
-            }
-
-            endGame() {
-                this.gameState = 'end';
-                clearInterval(this.timerInterval);
-
-                const resultScreen = document.getElementById('resultScreen');
-                const resultTitle = document.getElementById('resultTitle');
-
-                resultScreen.classList.add('show');
-
-                if (this.player.health > this.cpu.health) {
-                    resultTitle.textContent = '胜利!';
-                    resultTitle.className = 'result-title win';
-                } else if (this.player.health < this.cpu.health) {
-                    resultTitle.textContent = '失败!';
-                    resultTitle.className = 'result-title lose';
-                } else {
-                    resultTitle.textContent = '平局!';
-                    resultTitle.className = 'result-title';
-                }
-            }
-
-            update() {
-                if (this.gameState !== 'playing') return;
-
-                if (this.screenShake > 1) this.screenShake *= 0.9;
-
-                this.player.update(this.input, this.cpu);
-                this.cpu.update(null, this.player);
-
-                // 投射物更新和碰撞
-                this.projectiles.update();
-                
-                for (let i = this.projectiles.projectiles.length - 1; i >= 0; i--) {
-                    const p = this.projectiles.projectiles[i];
-                    
-                    if (p.facing > 0) {
-                        if (this.cpu.checkProjectileHit(p)) {
-                            const damage = p.type === 'punch' ? 40 : 50;
-                            this.cpu.takeDamage(damage, p.facing * 5, -3);
-                            this.particles.emit(p.x, p.y, p.color, 10, 5, 15);
-                            this.projectiles.projectiles.splice(i, 1);
-                        }
-                    } else {
-                        if (this.player.checkProjectileHit(p)) {
-                            const damage = p.type === 'punch' ? 40 : 50;
-                            this.player.takeDamage(damage, p.facing * 5, -3);
-                            this.particles.emit(p.x, p.y, p.color, 10, 5, 15);
-                            this.projectiles.projectiles.splice(i, 1);
-                        }
-                    }
-                }
-
-                // 大招直接伤害检测
-                if (this.player.state === 'ult' && this.player.stateTimer === 40) {
-                    const dist = Math.abs(this.player.x - this.cpu.x);
-                    if (dist < 250) {
-                        this.cpu.takeDamage(this.player.ult.damage * 0.6, this.player.facing * 10, -8);
-                    }
-                }
-                if (this.cpu.state === 'ult' && this.cpu.stateTimer === 40) {
-                    const dist = Math.abs(this.cpu.x - this.player.x);
-                    if (dist < 250) {
-                        this.player.takeDamage(this.cpu.ult.damage * 0.6, this.cpu.facing * 10, -8);
-                    }
-                }
-
-                if (this.player.health <= 0 || this.cpu.health <= 0) {
-                    this.endGame();
-                }
-
-                this.particles.update();
-                this.effects.update();
-                this.updateUI();
-            }
-
-            updateUI() {
-                const p1Health = (this.player.health / this.player.maxHealth) * 100;
-                const p2Health = (this.cpu.health / this.cpu.maxHealth) * 100;
-                document.getElementById('p1Health').style.width = p1Health + '%';
-                document.getElementById('p2Health').style.width = p2Health + '%';
-
-                const p1Energy = (this.player.energy / this.player.maxEnergy) * 100;
-                const p2Energy = (this.cpu.energy / this.cpu.maxEnergy) * 100;
-                document.getElementById('p1Energy').style.width = p1Energy + '%';
-                document.getElementById('p2Energy').style.width = p2Energy + '%';
-
-                const ultBtn = document.getElementById('btnUlt');
-                if (ultBtn) {
-                    ultBtn.classList.toggle('ready', this.player.energy >= 50);
-                }
-
-                const chargeBtn = document.getElementById('btnCharge');
-                if (chargeBtn) {
-                    chargeBtn.classList.toggle('charging', this.player.charging);
-                }
-            }
-
-            draw() {
-                this.ctx.fillStyle = '#0a0a1a';
-                this.ctx.fillRect(0, 0, this.width, this.height);
-
-                this.ctx.save();
-                if (this.screenShake > 1) {
-                    this.ctx.translate(
-                        (Math.random() - 0.5) * this.screenShake,
-                        (Math.random() - 0.5) * this.screenShake
-                    );
-                }
-
-                this.drawBackground();
-
-                if (this.player) this.player.draw(this.ctx);
-                if (this.cpu) this.cpu.draw(this.ctx);
-
-                this.projectiles.draw(this.ctx);
-                this.effects.draw(this.ctx);
-                this.particles.draw(this.ctx);
-
-                this.ctx.restore();
-            }
-
-            drawBackground() {
-                const groundY = this.height - 50;
-                
-                // 背景渐变
-                const bgGrad = this.ctx.createLinearGradient(0, 0, 0, this.height);
-                bgGrad.addColorStop(0, '#1a0a2e');
-                bgGrad.addColorStop(0.5, '#0d0d1a');
-                bgGrad.addColorStop(1, '#1a1a2e');
-                this.ctx.fillStyle = bgGrad;
-                this.ctx.fillRect(0, 0, this.width, this.height);
-
-                // 远景装饰线
-                this.ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-                this.ctx.lineWidth = 2;
-                for (let i = 0; i < this.width; i += 150) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(i, 0);
-                    this.ctx.lineTo(i - 100, this.height);
-                    this.ctx.stroke();
-                }
-
-                // 地面
-                const groundGrad = this.ctx.createLinearGradient(0, groundY, 0, this.height);
-                groundGrad.addColorStop(0, '#2a2a3a');
-                groundGrad.addColorStop(1, '#1a1a2a');
-                this.ctx.fillStyle = groundGrad;
-                this.ctx.fillRect(0, groundY, this.width, 50);
-
-                // 地面光效线
-                this.ctx.strokeStyle = 'rgba(100,100,150,0.3)';
-                this.ctx.lineWidth = 2;
-                this.ctx.beginPath();
-                this.ctx.moveTo(0, groundY);
-                this.ctx.lineTo(this.width, groundY);
-                this.ctx.stroke();
-
-                // 地面纹理
-                this.ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-                this.ctx.lineWidth = 1;
-                for (let i = 0; i < this.width; i += 100) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(i, groundY);
-                    this.ctx.lineTo(i - 50, this.height);
-                    this.ctx.stroke();
-                }
-            }
-
-            loop() {
-                this.update();
-                this.draw();
-                requestAnimationFrame(() => this.loop());
-            }
+          this.setupMobileControls()
         }
 
-        const game = new Game();
+        setupMobileControls() {
+          const buttons = [
+            ['btnUp', 'ArrowUp'],
+            ['btnDown', 'ArrowDown'],
+            ['btnLeft', 'ArrowLeft'],
+            ['btnRight', 'ArrowRight'],
+            ['btnPunch', 'KeyJ'],
+            ['btnKick', 'KeyK'],
+            ['btnCharge', 'KeyD'],
+            ['btnUlt', 'KeyL'],
+          ]
+
+          buttons.forEach(([id, code]) => {
+            const btn = document.getElementById(id)
+            if (!btn) return
+
+            let touchId = null
+
+            const onTouchStart = (e) => {
+              e.preventDefault()
+              if (touchId === null) {
+                touchId = e.changedTouches[0].identifier
+                this.input.keys[code] = true
+                if (code !== 'KeyD') this.input.keysPressed[code] = true
+                btn.classList.add('pressed')
+              }
+            }
+
+            const onTouchEnd = (e) => {
+              e.preventDefault()
+              for (let i = 0; i < e.changedTouches.length; i++) {
+                if (e.changedTouches[i].identifier === touchId) {
+                  touchId = null
+                  this.input.keys[code] = false
+                  this.input.keysPressed[code] = false
+                  btn.classList.remove('pressed')
+                  break
+                }
+              }
+            }
+
+            btn.addEventListener('touchstart', onTouchStart, { passive: false })
+            btn.addEventListener('touchend', onTouchEnd, { passive: false })
+            btn.addEventListener('touchcancel', onTouchEnd, { passive: false })
+          })
+        }
+
+        startGame() {
+          this.gameState = 'playing'
+          this.player = new Fighter(this.playerChar, 300, 400, true, this)
+          this.cpu = new Fighter(
+            this.cpuChar,
+            this.width - 300,
+            400,
+            false,
+            this,
+          )
+
+          document.getElementById('p1Name').textContent = this.player.name
+          document.getElementById('p2Name').textContent = this.cpu.name
+
+          this.timerInterval = setInterval(() => {
+            if (this.gameState === 'playing') {
+              this.timer--
+              document.getElementById('timer').textContent = this.timer
+              if (this.timer <= 0) {
+                this.endGame()
+              }
+            }
+          }, 1000)
+        }
+
+        showMoveName(name, color) {
+          // 只显示玩家技能名称，在屏幕左侧
+          const el = document.createElement('div')
+          el.className = 'move-name'
+          el.textContent = name
+          el.style.color = color
+          document.getElementById('ui').appendChild(el)
+          setTimeout(() => el.remove(), 1200)
+        }
+
+        endGame() {
+          this.gameState = 'end'
+          clearInterval(this.timerInterval)
+
+          const resultScreen = document.getElementById('resultScreen')
+          const resultTitle = document.getElementById('resultTitle')
+
+          resultScreen.classList.add('show')
+
+          if (this.player.health > this.cpu.health) {
+            resultTitle.textContent = '胜利!'
+            resultTitle.className = 'result-title win'
+          } else if (this.player.health < this.cpu.health) {
+            resultTitle.textContent = '失败!'
+            resultTitle.className = 'result-title lose'
+          } else {
+            resultTitle.textContent = '平局!'
+            resultTitle.className = 'result-title'
+          }
+        }
+
+        update() {
+          if (this.gameState !== 'playing') return
+
+          if (this.screenShake > 1) this.screenShake *= 0.9
+
+          this.player.update(this.input, this.cpu)
+          this.cpu.update(null, this.player)
+
+          // 投射物更新和碰撞
+          this.projectiles.update()
+
+          for (let i = this.projectiles.projectiles.length - 1; i >= 0; i--) {
+            const p = this.projectiles.projectiles[i]
+
+            if (p.facing > 0) {
+              if (this.cpu.checkProjectileHit(p)) {
+                const damage = p.type === 'punch' ? 40 : 50
+                this.cpu.takeDamage(damage, p.facing * 5, -3)
+                this.particles.emit(p.x, p.y, p.color, 10, 5, 15)
+                this.projectiles.projectiles.splice(i, 1)
+              }
+            } else {
+              if (this.player.checkProjectileHit(p)) {
+                const damage = p.type === 'punch' ? 40 : 50
+                this.player.takeDamage(damage, p.facing * 5, -3)
+                this.particles.emit(p.x, p.y, p.color, 10, 5, 15)
+                this.projectiles.projectiles.splice(i, 1)
+              }
+            }
+          }
+
+          // 大招直接伤害检测
+          if (this.player.state === 'ult' && this.player.stateTimer === 40) {
+            const dist = Math.abs(this.player.x - this.cpu.x)
+            if (dist < 250) {
+              this.cpu.takeDamage(
+                this.player.ult.damage * 0.6,
+                this.player.facing * 10,
+                -8,
+              )
+            }
+          }
+          if (this.cpu.state === 'ult' && this.cpu.stateTimer === 40) {
+            const dist = Math.abs(this.cpu.x - this.player.x)
+            if (dist < 250) {
+              this.player.takeDamage(
+                this.cpu.ult.damage * 0.6,
+                this.cpu.facing * 10,
+                -8,
+              )
+            }
+          }
+
+          if (this.player.health <= 0 || this.cpu.health <= 0) {
+            this.endGame()
+          }
+
+          this.particles.update()
+          this.effects.update()
+          this.updateUI()
+        }
+
+        updateUI() {
+          const p1Health = (this.player.health / this.player.maxHealth) * 100
+          const p2Health = (this.cpu.health / this.cpu.maxHealth) * 100
+          document.getElementById('p1Health').style.width = p1Health + '%'
+          document.getElementById('p2Health').style.width = p2Health + '%'
+
+          const p1Energy = (this.player.energy / this.player.maxEnergy) * 100
+          const p2Energy = (this.cpu.energy / this.cpu.maxEnergy) * 100
+          document.getElementById('p1Energy').style.width = p1Energy + '%'
+          document.getElementById('p2Energy').style.width = p2Energy + '%'
+
+          const ultBtn = document.getElementById('btnUlt')
+          if (ultBtn) {
+            ultBtn.classList.toggle('ready', this.player.energy >= 50)
+          }
+
+          const chargeBtn = document.getElementById('btnCharge')
+          if (chargeBtn) {
+            chargeBtn.classList.toggle('charging', this.player.charging)
+          }
+        }
+
+        draw() {
+          this.ctx.fillStyle = '#0a0a1a'
+          this.ctx.fillRect(0, 0, this.width, this.height)
+
+          this.ctx.save()
+          if (this.screenShake > 1) {
+            this.ctx.translate(
+              (Math.random() - 0.5) * this.screenShake,
+              (Math.random() - 0.5) * this.screenShake,
+            )
+          }
+
+          this.drawBackground()
+
+          if (this.player) this.player.draw(this.ctx)
+          if (this.cpu) this.cpu.draw(this.ctx)
+
+          this.projectiles.draw(this.ctx)
+          this.effects.draw(this.ctx)
+          this.particles.draw(this.ctx)
+
+          this.ctx.restore()
+        }
+
+        drawBackground() {
+          const groundY = this.height - 50
+
+          // 背景渐变
+          const bgGrad = this.ctx.createLinearGradient(0, 0, 0, this.height)
+          bgGrad.addColorStop(0, '#1a0a2e')
+          bgGrad.addColorStop(0.5, '#0d0d1a')
+          bgGrad.addColorStop(1, '#1a1a2e')
+          this.ctx.fillStyle = bgGrad
+          this.ctx.fillRect(0, 0, this.width, this.height)
+
+          // 远景装饰线
+          this.ctx.strokeStyle = 'rgba(255,255,255,0.03)'
+          this.ctx.lineWidth = 2
+          for (let i = 0; i < this.width; i += 150) {
+            this.ctx.beginPath()
+            this.ctx.moveTo(i, 0)
+            this.ctx.lineTo(i - 100, this.height)
+            this.ctx.stroke()
+          }
+
+          // 地面
+          const groundGrad = this.ctx.createLinearGradient(
+            0,
+            groundY,
+            0,
+            this.height,
+          )
+          groundGrad.addColorStop(0, '#2a2a3a')
+          groundGrad.addColorStop(1, '#1a1a2a')
+          this.ctx.fillStyle = groundGrad
+          this.ctx.fillRect(0, groundY, this.width, 50)
+
+          // 地面光效线
+          this.ctx.strokeStyle = 'rgba(100,100,150,0.3)'
+          this.ctx.lineWidth = 2
+          this.ctx.beginPath()
+          this.ctx.moveTo(0, groundY)
+          this.ctx.lineTo(this.width, groundY)
+          this.ctx.stroke()
+
+          // 地面纹理
+          this.ctx.strokeStyle = 'rgba(255,255,255,0.05)'
+          this.ctx.lineWidth = 1
+          for (let i = 0; i < this.width; i += 100) {
+            this.ctx.beginPath()
+            this.ctx.moveTo(i, groundY)
+            this.ctx.lineTo(i - 50, this.height)
+            this.ctx.stroke()
+          }
+        }
+
+        loop() {
+          this.update()
+          this.draw()
+          requestAnimationFrame(() => this.loop())
+        }
+      }
+
+      const game = new Game()
     </script>
-</body>
+  </body>
 </html>
